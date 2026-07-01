@@ -17,11 +17,11 @@
             justify-content: center;
             min-height: 100vh; 
             padding: 10px;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
         h1 { 
-            margin: 2px 0 5px 0;
+            margin: 5px 0;
             font-size: 1.4rem; 
             color: #ffd700;
             text-shadow: 0px 2px 4px rgba(0,0,0,0.8); 
@@ -33,8 +33,8 @@
         .bank-info {
             display: flex;
             gap: 25px;
-            margin-bottom: 8px;
-            font-size: 1rem;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
             background: rgba(0,0,0,0.6);
             padding: 6px 25px;
             border-radius: 30px;
@@ -43,22 +43,24 @@
         }
         .bank-info span { color: #ffd700; font-weight: bold; }
 
-        /* Table de Blackjack style Casino */
+        /* Table de Blackjack style Casino - Responsive */
         .table { 
             width: 100%; 
             max-width: 800px; 
             background: radial-gradient(circle, #0e5c33 60%, #073a1f 100%); 
-            border: 14px solid #3d2314; 
+            border: 12px solid #3d2314; 
             border-bottom-color: #2b180d;
-            border-radius: 50% 50% 25px 25px / 45% 45% 25px 25px; 
-            padding: 15px 20px; 
-            box-shadow: inset 0 0 70px rgba(0,0,0,1), 0 15px 35px rgba(0,0,0,0.8); 
+            border-radius: 40px; 
+            padding: 20px; 
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.9), 0 12px 25px rgba(0,0,0,0.7); 
             display: flex; 
             flex-direction: column; 
             position: relative;
-            height: 420px; 
+            height: 440px; 
+            margin-bottom: 10px;
         }
 
+        /* Correction de la distorsion des lignes du tapis */
         .table-felt-print {
             position: absolute;
             top: 0;
@@ -80,52 +82,59 @@
             z-index: 2;
         }
 
-        /* Conteneur dynamique pour aligner tous les joueurs connectés */
+        /* Alignement dynamique des joueurs */
         .players-container {
             position: absolute;
-            bottom: 20px;
+            bottom: 15px;
             left: 0;
             width: 100%;
             display: flex;
             justify-content: space-around;
-            padding: 0 20px;
+            padding: 0 10px;
             z-index: 2;
+            gap: 5px;
         }
 
         .player-spot {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 5px;
-            background: rgba(0,0,0,0.3);
-            padding: 8px;
-            border-radius: 10px;
+            gap: 4px;
+            background: rgba(0,0,0,0.4);
+            padding: 6px;
+            border-radius: 8px;
             border: 1px solid rgba(255, 215, 0, 0.1);
-            min-width: 110px;
+            flex: 1;
+            max-width: 140px;
+            min-width: 85px;
             position: relative;
         }
 
         .player-spot.current-user {
             border-color: #ffd700;
-            background: rgba(255, 215, 0, 0.05);
+            background: rgba(255, 215, 0, 0.08);
         }
 
         .zone-title { 
-            font-size: 0.75rem; 
+            font-size: 0.7rem; 
             font-weight: bold; 
             text-transform: uppercase; 
             letter-spacing: 1px; 
-            color: rgba(255, 215, 0, 0.8); 
+            color: rgba(255, 215, 0, 0.9); 
             text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
             text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
         }
 
         .score { 
             background: rgba(0,0,0,0.85); 
-            padding: 1px 8px; 
+            padding: 1px 6px; 
             border-radius: 20px; 
             font-weight: bold; 
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #fff;
             border: 1px solid #ffd700;
         }
@@ -134,54 +143,53 @@
             display: flex; 
             justify-content: center;
             align-items: center;
-            min-height: 80px; 
+            min-height: 70px; 
             width: 100%;
             position: relative;
         }
 
-        /* Cartes réduites pour que tout le monde rentre sur mobile et PC */
+        /* Cartes ajustées pour le multi-écran */
         .card { 
-            width: 50px; 
-            height: 75px; 
+            width: 42px; 
+            height: 64px; 
             background: #ffffff; 
             color: #111111; 
             border-radius: 4px; 
             display: flex; 
             flex-direction: column; 
             justify-content: space-between; 
-            padding: 4px; 
+            padding: 3px; 
             font-weight: bold; 
-            font-size: 0.9rem; 
-            box-shadow: 2px 4px 8px rgba(0,0,0,0.6); 
+            font-size: 0.8rem; 
+            box-shadow: 2px 4px 6px rgba(0,0,0,0.5); 
             border: 1px solid #d1d1d1;
-            margin: 0 -15px; 
+            margin: 0 -12px; 
             font-family: 'Arial', sans-serif;
             animation: dealCard 0.3s ease-out;
         }
         .card.red { color: #cc1111; }
         .card .bottom-suit { transform: rotate(180deg); align-self: flex-end; }
         
-        /* Zone de mise du jeton pour chaque joueur */
         .player-bet-spot {
-            width: 35px;
-            height: 35px;
+            width: 30px;
+            height: 30px;
             border: 1.5px dashed rgba(255, 215, 0, 0.5);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.65rem;
-            background: rgba(0,0,0,0.4);
+            font-size: 0.6rem;
+            background: rgba(0,0,0,0.5);
             font-weight: bold;
             color: #ffd700;
         }
 
-        /* Jetons du rack */
+        /* Jetons */
         .token {
-            width: 44px; height: 44px; border-radius: 50%; border: 3px dashed #fff;
+            width: 42px; height: 42px; border-radius: 50%; border: 3px dashed #fff;
             display: flex; align-items: center; justify-content: center;
-            font-size: 0.75rem; font-weight: bold; color: white; cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.6), inset 0 0 8px rgba(0,0,0,0.4);
+            font-size: 0.7rem; font-weight: bold; color: white; cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.5), inset 0 0 6px rgba(0,0,0,0.4);
             font-family: 'Arial', sans-serif; user-select: none;
         }
         .token-5 { background: #cc2424; border-color: #ffd700; }  
@@ -190,15 +198,15 @@
         .token-500 { background: #7a1fa1; border-color: #fff; }   
 
         .token-rack {
-            display: flex; gap: 12px; justify-content: center; margin: 8px 0;
-            background: rgba(0,0,0,0.5); padding: 8px 20px; border-radius: 40px;
+            display: flex; gap: 10px; justify-content: center; margin: 5px 0;
+            background: rgba(0,0,0,0.5); padding: 6px 15px; border-radius: 40px;
         }
 
-        #msg { text-align: center; font-size: 1.1rem; font-weight: bold; min-height: 28px; margin: 4px 0; }
+        #msg { text-align: center; font-size: 1rem; font-weight: bold; min-height: 24px; margin: 5px 0; color: #ffd700; }
 
-        .controls { display: flex; gap: 10px; justify-content: center; width: 100%; max-width: 440px; }
+        .controls { display: flex; gap: 10px; justify-content: center; width: 100%; max-width: 400px; padding: 0 10px; }
         button { 
-            flex: 1; padding: 10px; font-size: 0.85rem; font-weight: bold; text-transform: uppercase;
+            flex: 1; padding: 10px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase;
             border: 2px solid rgba(255,255,255,0.2); border-radius: 30px; cursor: pointer; color: white; 
         }
         #btn-hit { background: linear-gradient(135deg, #1e7e34 0%, #155724 100%); border-color: #28a745; }
@@ -207,11 +215,26 @@
         #btn-clear { background: #5a6268; border-color: #777; }
 
         @keyframes dealCard { 0% { transform: translateY(-50px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+
+        /* Optimisations spécifiques pour écrans de téléphones */
+        @media (max-width: 500px) {
+            .table {
+                height: 360px;
+                border-width: 8px;
+                border-radius: 20px;
+                padding: 10px;
+            }
+            .card { width: 36px; height: 54px; font-size: 0.75rem; margin: 0 -10px; }
+            .token { width: 36px; height: 36px; font-size: 0.65rem; }
+            .token-rack { padding: 4px 10px; gap: 8px; }
+            h1 { font-size: 1.1rem; }
+            .bank-info { font-size: 0.85rem; gap: 15px; padding: 4px 15px; }
+        }
     </style>
 </head>
 <body>
 
-    <h1>CASINO ROYALE LIGNE</h1>
+    <h1>CASINO ROYALE</h1>
 
     <div class="bank-info">
         <div>Votre Solde : <span id="balance-val">1000</span> $</div>
@@ -219,10 +242,10 @@
     </div>
     
     <div class="table">
-        <svg class="table-felt-print" viewBox="0 0 800 420" preserveAspectRatio="none">
-            <defs><path id="text-curve" d="M 150,210 A 250,180 0 0,0 650,210" fill="none" /></defs>
-            <path d="M 100,170 A 300,220 0 0,0 700,170" fill="none" stroke="rgba(255, 215, 0, 0.2)" stroke-width="2" stroke-dasharray="6,4" />
-            <text font-family="Georgia, serif" font-size="16" font-weight="bold" fill="rgba(255, 215, 0, 0.25)" letter-spacing="4" text-anchor="middle">
+        <svg class="table-felt-print" viewBox="0 0 800 440" preserveAspectRatio="xMidYMid meet">
+            <defs><path id="text-curve" d="M 150,230 A 250,180 0 0,0 650,230" fill="none" /></defs>
+            <path d="M 120,190 A 280,200 0 0,0 680,190" fill="none" stroke="rgba(255, 215, 0, 0.15)" stroke-width="2" stroke-dasharray="6,4" />
+            <text font-family="Georgia, serif" font-size="16" font-weight="bold" fill="rgba(255, 215, 0, 0.2)" letter-spacing="4" text-anchor="middle">
                 <textPath href="#text-curve" startOffset="50%">BLACKJACK PAYS 3 TO 2</textPath>
             </text>
         </svg>
@@ -250,10 +273,8 @@
     </div>
 
     <script>
-        // ⚠️ REMPLACE CETTE ADRESSE PAR CELLE QUE RENDER TE DONNE QUAND IL SERA LIVE !
-        const SERVEUR_URL = "https://blackjack-8uar.onrender.com
-
-"; 
+        // Ton URL Render exacte pré-configurée
+        const SERVEUR_URL = "https://blackjack-8uar.onrender.com"; 
         
         const socket = io(SERVEUR_URL);
         let myId = null;
@@ -263,14 +284,16 @@
             document.getElementById('msg').innerText = "Connecté ! Place tes jetons.";
         });
 
+        socket.on('connect_error', () => {
+            document.getElementById('msg').innerText = "Réveil du serveur en cours... (Patienter 30s)";
+        });
+
         socket.on('gameState', (state) => {
-            // 1. Gérer le Croupier
             document.getElementById('dealer-score').innerText = state.dealerScore;
             const dCardsBox = document.getElementById('dealer-cards');
             dCardsBox.innerHTML = '';
             state.dealerCards.forEach(c => dCardsBox.appendChild(createCardUI(c)));
 
-            // 2. Gérer les Joueurs
             const playersBox = document.getElementById('players-box');
             playersBox.innerHTML = '';
 
@@ -281,11 +304,9 @@
                     document.getElementById('bet-val').innerText = p.bet;
                 }
 
-                // Créer l'emplacement visuel de chaque joueur connecté
                 const pSpot = document.createElement('div');
                 pSpot.className = `player-spot ${isMe ? 'current-user' : ''}`;
                 
-                let cardsHTML = '';
                 const cardsFlex = document.createElement('div');
                 cardsFlex.className = 'cards-flex';
                 p.cards.forEach(c => cardsFlex.appendChild(createCardUI(c)));
@@ -299,30 +320,31 @@
                 playersBox.appendChild(pSpot);
             });
 
-            // 3. Adapter les boutons selon le statut du jeu
             const controls = document.getElementById('controls-container');
             const rack = document.getElementById('rack');
             
             if (state.status === 'betting') {
                 rack.style.opacity = '1';
+                rack.style.pointerEvents = 'auto';
                 controls.innerHTML = `
                     <button id="btn-clear" onclick="clearBet()">Effacer</button>
                     <button id="btn-deal" onclick="startRound()">Distribuer</button>
                 `;
                 if(state.players[myId] && state.players[myId].bet > 0) {
-                    document.getElementById('msg').innerText = "Mise validée ! Attente des autres ou clique sur Distribuer.";
+                    document.getElementById('msg').innerText = "Mise validée ! Attente du lancement.";
                 }
             } else if (state.status === 'playing') {
                 rack.style.opacity = '0.2';
+                rack.style.pointerEvents = 'none';
                 const me = state.players[myId];
                 if (me && me.status === 'playing') {
-                    document.getElementById('msg').innerText = "À toi de jouer : Tu tires ou tu restes ?";
+                    document.getElementById('msg').innerText = "À toi de jouer !";
                     controls.innerHTML = `
                         <button id="btn-hit" onclick="hit()">Tirer</button>
                         <button id="btn-stand" onclick="stand()">Rester</button>
                     `;
                 } else {
-                    document.getElementById('msg').innerText = "Les joueurs finissent leur main...";
+                    document.getElementById('msg').innerText = "Les autres joueurs décident...";
                     controls.innerHTML = '';
                 }
             } else {
