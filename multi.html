@@ -10,25 +10,27 @@
         body { background: radial-gradient(circle, #1a1a1a 0%, #0a0a0a 100%); color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 10px; overflow-x: hidden; }
         .login-screen { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:100; display:flex; flex-direction:column; align-items:center; justify-content:center; }
         .home-btn { position: absolute; top: 15px; left: 15px; background: rgba(255, 255, 255, 0.1); color: white; padding: 8px 12px; border-radius: 50%; text-decoration: none; font-size: 1.2rem; border: 1px solid #ffd700; z-index: 10; }
-        h1 { font-size: 1.4rem; color: #ffd700; text-align: center; margin-bottom: 20px; }
-        input { padding: 10px; border-radius: 20px; border: 1px solid #ffd700; background: #000; color: #fff; text-align: center; margin-bottom: 15px; }
-        button.join-btn { padding: 10px 30px; background: #1e7e34; border: none; color: white; border-radius: 20px; cursor: pointer; font-weight: bold; }
+        h1 { margin: 5px 0; font-size: 1.4rem; color: #ffd700; text-shadow: 0px 2px 4px rgba(0,0,0,0.8); text-align: center; }
         .bank-info { display: flex; gap: 25px; margin-bottom: 10px; font-size: 0.95rem; background: rgba(0,0,0,0.6); padding: 6px 25px; border-radius: 30px; border: 1px solid #ffd700; }
-        .table { width: 100%; max-width: 800px; background: radial-gradient(circle, #0e5c33 60%, #073a1f 100%); border: 12px solid #3d2314; border-radius: 40px; padding: 20px; height: 440px; position: relative; }
+        .bank-info span { color: #ffd700; font-weight: bold; }
+        .table { width: 100%; max-width: 800px; background: radial-gradient(circle, #0e5c33 60%, #073a1f 100%); border: 12px solid #3d2314; border-radius: 40px; padding: 20px; box-shadow: inset 0 0 50px rgba(0,0,0,0.9); position: relative; height: 440px; }
         .zone-dealer { position: absolute; top: 20px; left: 0; width: 100%; display: flex; flex-direction: column; align-items: center; }
         .players-container { position: absolute; bottom: 15px; left: 0; width: 100%; display: flex; justify-content: space-around; padding: 0 10px; }
-        .player-spot { display: flex; flex-direction: column; align-items: center; background: rgba(0,0,0,0.4); padding: 6px; border-radius: 8px; border: 1px solid rgba(255, 215, 0, 0.1); width: 100px; }
-        .player-spot.current-user { border-color: #ffd700; }
-        .zone-title { font-size: 0.7rem; font-weight: bold; color: #ffd700; }
-        .card { width: 40px; height: 60px; background: #fff; color: #000; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; margin: 0 -10px; }
-        .token-rack { display: flex; gap: 10px; justify-content: center; margin: 10px 0; }
+        .player-spot { display: flex; flex-direction: column; align-items: center; background: rgba(0,0,0,0.4); padding: 6px; border-radius: 8px; border: 1px solid rgba(255, 215, 0, 0.1); width: 120px; }
+        .current-user { border-color: #ffd700; background: rgba(255, 215, 0, 0.08); }
+        .token { width: 42px; height: 42px; border-radius: 50%; border: 3px dashed #fff; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; color: white; cursor: pointer; margin: 0 5px; }
+        .token-5 { background: #cc2424; border-color: #ffd700; }  
+        .token-25 { background: #1a54a1; border-color: #fff; }    
+        .token-100 { background: #1a1a1a; border-color: #ffd700; } 
+        .token-rack { display: flex; gap: 10px; justify-content: center; margin: 10px 0; background: rgba(0,0,0,0.5); padding: 6px 15px; border-radius: 40px; }
         .controls { display: flex; gap: 10px; justify-content: center; }
+        button { padding: 10px 20px; border-radius: 30px; border: 2px solid rgba(255,255,255,0.2); cursor: pointer; color: white; font-weight: bold; }
     </style>
 </head>
 <body>
     <div id="login-screen" class="login-screen">
-        <h1>CHOISIS TON PSEUDO</h1>
-        <input type="text" id="username-input" placeholder="Ton pseudo..." maxlength="10">
+        <h1>TON PSEUDO</h1>
+        <input type="text" id="username-input" placeholder="Ton nom ici..." maxlength="10">
         <button class="join-btn" onclick="joinGame()">ENTRER</button>
     </div>
 
@@ -39,12 +41,16 @@
         <div>Mise : <span id="bet-val">0</span> $</div>
     </div>
     <div class="table">
-        <div class="zone-dealer"><div class="zone-title">Croupier (<span id="dealer-score">0</span>)</div><div id="dealer-cards" style="display:flex"></div></div>
+        <div class="zone-dealer"><div class="zone-title">Croupier</div><div id="dealer-cards" style="display:flex"></div></div>
         <div class="players-container" id="players-box"></div>
     </div>
     <div id="msg">En attente...</div>
-    <div class="token-rack" id="rack"><button onclick="sendBet(5)">5$</button><button onclick="sendBet(25)">25$</button></div>
-    <div class="controls" id="controls-container"><button onclick="clearBet()">Effacer</button><button onclick="startRound()">Distribuer</button></div>
+    <div class="token-rack">
+        <div class="token token-5" onclick="sendBet(5)">5$</div>
+        <div class="token token-25" onclick="sendBet(25)">25$</div>
+        <div class="token token-100" onclick="sendBet(100)">100$</div>
+    </div>
+    <div class="controls"><button onclick="clearBet()">Effacer</button><button onclick="startRound()">Distribuer</button></div>
 
     <script>
         const socket = io("https://blackjack-8uar.onrender.com");
@@ -56,17 +62,11 @@
         }
         socket.on('connect', () => { myId = socket.id; });
         socket.on('gameState', (state) => {
-            document.getElementById('dealer-score').innerText = state.dealerScore;
-            document.getElementById('dealer-cards').innerHTML = '';
-            state.dealerCards.forEach(c => {
-                let div = document.createElement('div'); div.className = 'card'; div.innerText = c.value;
-                document.getElementById('dealer-cards').appendChild(div);
-            });
             const pBox = document.getElementById('players-box'); pBox.innerHTML = '';
             Object.values(state.players).forEach(p => {
                 const isMe = p.id === myId;
                 if(isMe) { document.getElementById('balance-val').innerText = p.balance; document.getElementById('bet-val').innerText = p.bet; }
-                pBox.innerHTML += `<div class="player-spot ${isMe ? 'current-user' : ''}"><div class="zone-title">${p.name}</div><div>${p.score}</div><div class="zone-title">${isMe ? p.bet+'$' : '***'}</div></div>`;
+                pBox.innerHTML += `<div class="player-spot ${isMe ? 'current-user' : ''}"><div style="font-size:0.8rem; font-weight:bold">${p.name}</div><div>${p.score}</div><div style="color:#ffd700">${isMe ? p.bet+'$' : '...'}</div></div>`;
             });
         });
         function sendBet(a) { socket.emit('placeBet', a); }
