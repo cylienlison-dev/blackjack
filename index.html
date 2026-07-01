@@ -3,50 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blackjack entre Potes</title>
+    <title>Casino Blackjack Realiste</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background: #0f4c2c; color: white; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 15px; }
-        h1 { margin-bottom: 10px; font-size: 1.8rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); text-align: center; }
-        .table { width: 100%; max-width: 600px; background: #146638; border: 6px solid #4a2e1b; border-radius: 20px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); display: flex; flex-direction: column; gap: 20px; }
-        .zone { background: rgba(0,0,0,0.2); border-radius: 10px; padding: 12px; min-height: 110px; position: relative; }
-        .zone-title { font-size: 0.9rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #a3e2bc; margin-bottom: 8px; }
-        .score { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.6); padding: 2px 8px; border-radius: 5px; font-weight: bold; }
-        .cards-flex { display: flex; gap: 8px; flex-wrap: wrap; }
-        .card { width: 60px; height: 90px; background: white; color: black; border-radius: 6px; display: flex; flex-direction: column; justify-content: space-between; padding: 5px; font-weight: bold; font-size: 1.1rem; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); animation: pop 0.3s ease; }
-        .card.red { color: #d12c2c; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Georgia', serif; }
+        
+        body { 
+            background: radial-gradient(circle, #1a1a1a 0%, #0a0a0a 100%); 
+            color: white; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            min-height: 100vh; 
+            padding: 15px;
+            overflow-x: hidden;
+        }
+
+        h1 { 
+            margin-bottom: 15px; 
+            font-size: 1.8rem; 
+            color: #ffd700;
+            text-shadow: 0px 2px 4px rgba(0,0,0,0.8); 
+            text-align: center; 
+            font-weight: normal;
+            letter-spacing: 2px;
+        }
+
+        /* La table de Blackjack incurvée style Casino */
+        .table { 
+            width: 100%; 
+            max-width: 700px; 
+            background: radial-gradient(circle, #0f522e 60%, #08361e 100%); 
+            border: 14px solid #3d2314; /* Bordure en bois massif */
+            border-bottom-color: #2b180d;
+            border-radius: 50% 50% 20px 20px / 40% 40% 20px 20px; /* Forme de demi-lune / ovale */
+            padding: 40px 30px 30px 30px; 
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.8), 0 15px 35px rgba(0,0,0,0.7); 
+            display: flex; 
+            flex-direction: column; 
+            gap: 25px; 
+            position: relative;
+        }
+
+        /* Inscription réglementaire sur le tapis */
+        .casino-rules {
+            text-align: center;
+            color: rgba(255, 215, 0, 0.4); /* Doré semi-transparent incrusté dans le tapis */
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 1px dashed rgba(255, 215, 0, 0.2);
+            padding-bottom: 15px;
+            margin-bottom: -5px;
+            pointer-events: none;
+        }
+
+        .zone { 
+            position: relative; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            gap: 10px;
+        }
+
+        .zone-title { 
+            font-size: 0.85rem; 
+            font-weight: bold; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            color: #ffd700; 
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+        }
+
+        .score { 
+            background: rgba(0,0,0,0.75); 
+            padding: 3px 10px; 
+            border-radius: 20px; 
+            font-weight: bold; 
+            font-size: 0.9rem;
+            color: #fff;
+            border: 1px solid #ffd700;
+        }
+
+        .cards-flex { 
+            display: flex; 
+            justify-content: center;
+            gap: -15px; /* Légère superposition des cartes */
+            min-height: 115px;
+            width: 100%;
+            padding: 5px;
+        }
+
+        /* Look des vraies cartes à jouer */
+        .card { 
+            width: 75px; 
+            height: 110px; 
+            background: #ffffff; 
+            color: #111111; 
+            border-radius: 6px; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            padding: 6px; 
+            font-weight: bold; 
+            font-size: 1.2rem; 
+            box-shadow: 3px 5px 10px rgba(0,0,0,0.4); 
+            border: 1px solid #d1d1d1;
+            margin: 0 -8px; /* Effet paquet de cartes étalé */
+            transform: rotate(calc(var(--r, 0) * 1deg));
+            animation: dealCard 0.4s ease-out; 
+            font-family: 'Arial', sans-serif;
+        }
+
+        .card.red { color: #cc1111; }
         .card .bottom-suit { align-self: flex-end; transform: rotate(180deg); }
-        .controls { display: flex; gap: 10px; justify-content: center; margin-top: 10px; width: 100%; max-width: 600px; }
-        button { flex: 1; padding: 15px; font-size: 1rem; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: transform 0.1s; -webkit-tap-highlight-color: transparent; }
-        button:active { transform: scale(0.95); }
-        #btn-hit { background: #28a745; }
-        #btn-stand { background: #dc3545; }
-        #btn-restart { background: #007bff; display: none; }
-        #msg { text-align: center; font-size: 1.3rem; font-weight: bold; min-height: 30px; margin-top: 5px; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
-        @keyframes pop { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        
+        /* Message central */
+        #msg { 
+            text-align: center; 
+            font-size: 1.4rem; 
+            font-weight: bold; 
+            min-height: 35px; 
+            margin: 15px 0; 
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8); 
+        }
+
+        /* Boutons de jeu style Jetons / Chic */
+        .controls { 
+            display: flex; 
+            gap: 15px; 
+            justify-content: center; 
+            width: 100%; 
+            max-width: 500px; 
+        }
+
+        button { 
+            flex: 1; 
+            padding: 14px; 
+            font-size: 1rem; 
+            font-weight: bold; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 2px solid rgba(255,255,255,0.2); 
+            border-radius: 30px; 
+            cursor: pointer; 
+            color: white; 
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4); 
+            transition: all 0.2s ease; 
+            -webkit-tap-highlight-color: transparent; 
+        }
+
+        button:active { transform: translateY(3px); box-shadow: 0 2px 5px rgba(0,0,0,0.4); }
+
+        #btn-hit { 
+            background: linear-gradient(135deg, #1e7e34 0%, #155724 100%); 
+            border-color: #28a745;
+        }
+        #btn-stand { 
+            background: linear-gradient(135deg, #bd2130 0%, #721c24 100%); 
+            border-color: #dc3545;
+        }
+        #btn-restart { 
+            background: linear-gradient(135deg, #d39e00 0%, #937000 100%); 
+            border-color: #ffd700;
+            color: #000;
+            display: none; 
+        }
+
+        /* Animation de distribution des cartes */
+        @keyframes dealCard { 
+            0% { transform: translateY(-150px) rotate(-20deg); opacity: 0; } 
+            100% { transform: translateY(0) rotate(0deg); opacity: 1; } 
+        }
     </style>
 </head>
 <body>
 
-    <h1>♣️ Blackjack Casino ♥️</h1>
+    <h1>CASINO BLACKJACK</h1>
     
     <div class="table">
-        <!-- Croupier -->
+        <div class="casino-rules">Le Croupier reste à 17 et tire à 16 — Banque paie 3 pour 2</div>
+
         <div class="zone">
             <div class="zone-title">Croupier</div>
-            <div class="score" id="dealer-score">0</div>
             <div class="cards-flex" id="dealer-cards"></div>
+            <div class="score" id="dealer-score">0</div>
         </div>
 
-        <!-- Joueur -->
         <div class="zone">
-            <div class="zone-title">Toi</div>
-            <div class="score" id="player-score">0</div>
+            <div class="zone-title">Votre Main</div>
             <div class="cards-flex" id="player-cards"></div>
+            <div class="score" id="player-score">0</div>
         </div>
     </div>
 
-    <div id="msg">Bonne chance !</div>
+    <div id="msg">Faites vos jeux...</div>
 
     <div class="controls">
         <button id="btn-hit" onclick="hit()">Tirer</button>
@@ -89,7 +240,12 @@
             const el = document.getElementById(elementId);
             const cardEl = document.createElement('div');
             cardEl.className = `card ${card.isRed ? 'red' : ''}`;
-            cardEl.innerHTML = `<div>${card.value} ${card.suit}</div><div class="bottom-suit">${card.value} ${card.suit}</div>`;
+            
+            // Donne une rotation aléatoire très légère pour faire "vrai tas de cartes jeté"
+            const randomRotation = (Math.random() * 6 - 3).toFixed(1);
+            cardEl.style.setProperty('--r', randomRotation);
+
+            cardEl.innerHTML = `<div>${card.value}<br>${card.suit}</div><div class="bottom-suit">${card.value}<br>${card.suit}</div>`;
             el.appendChild(cardEl);
         }
 
@@ -98,7 +254,7 @@
             playerCards = []; dealerCards = []; gameOver = false;
             document.getElementById('player-cards').innerHTML = '';
             document.getElementById('dealer-cards').innerHTML = '';
-            document.getElementById('msg').innerText = "À toi de jouer !";
+            document.getElementById('msg').innerText = "À vous de jouer.";
             document.getElementById('btn-hit').style.display = 'block';
             document.getElementById('btn-stand').style.display = 'block';
             document.getElementById('btn-restart').style.display = 'none';
@@ -122,7 +278,7 @@
             updateScores();
 
             if (getScore(playerCards) > 21) {
-                endGame("Perdu ! Tu as dépassé 21. 💸");
+                endGame("Sautet ! Vous avez dépassé 21. 💸");
             }
         }
 
@@ -130,7 +286,6 @@
             if (gameOver) return;
             gameOver = true;
 
-            // Le croupier joue
             while (getScore(dealerCards) < 17) {
                 let card = deck.pop();
                 dealerCards.push(card);
@@ -141,10 +296,10 @@
             let pScore = getScore(playerCards);
             let dScore = getScore(dealerCards);
 
-            if (dScore > 21) endGame("Gagné ! Le croupier a dépassé 21. 🎉");
-            else if (pScore > dScore) endGame("Gagné ! Tu bats le croupier. 👑");
-            else if (pScore < dScore) endGame("Perdu ! Le croupier gagne. 💸");
-            else endGame("Égalité ! Tu récupères ta mise. 🤝");
+            if (dScore > 21) endGame("Gagné ! Le croupier saute. 🎉");
+            else if (pScore > dScore) endGame("Gagné ! Vous battez la banque. 👑");
+            else if (pScore < dScore) endGame("Perdu ! La banque gagne. 💸");
+            else endGame("Égalité ! Les mises restent en place. 🤝");
         }
 
         function endGame(msg) {
