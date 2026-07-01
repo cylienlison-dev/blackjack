@@ -42,23 +42,24 @@
         }
         .bank-info span { color: #ffd700; font-weight: bold; }
 
-        /* Table de Blackjack */
+        /* Superbe Table de Blackjack style Casino Réaliste */
         .table { 
             width: 100%; 
             max-width: 620px; 
             background: radial-gradient(circle, #0e5c33 60%, #073a1f 100%); 
-            border: 12px solid #3d2314; 
+            border: 14px solid #3d2314; 
             border-bottom-color: #2b180d;
             border-radius: 50% 50% 25px 25px / 45% 45% 25px 25px; 
-            padding: 20px 20px 15px 20px; 
-            box-shadow: inset 0 0 60px rgba(0,0,0,0.9), 0 15px 35px rgba(0,0,0,0.7); 
+            padding: 15px 20px 15px 20px; 
+            box-shadow: inset 0 0 70px rgba(0,0,0,1), 0 15px 35px rgba(0,0,0,0.8); 
             display: flex; 
             flex-direction: column; 
             gap: 2px; 
             position: relative;
+            height: 380px; /* Hauteur fixe pour aligner parfaitement le tapis */
         }
 
-        /* Conteneur pour le texte courbé en fond de table */
+        /* Sérigraphie complète du tapis de jeu */
         .table-felt-print {
             position: absolute;
             top: 0;
@@ -69,13 +70,26 @@
             z-index: 1;
         }
 
+        /* Zones de jeu calées pile sur le dessin de la table */
         .zone { 
-            position: relative; 
+            position: absolute; 
+            left: 0;
+            width: 100%;
             display: flex; 
             flex-direction: column; 
             align-items: center;
             gap: 2px;
-            z-index: 2; /* Passe au-dessus des écritures de la table */
+            z-index: 2; 
+        }
+
+        /* Placement précis de la zone Croupier au niveau de ses cases imprimées */
+        .zone-dealer {
+            top: 25px;
+        }
+
+        /* Placement précis de la zone Joueur en bas */
+        .zone-player {
+            bottom: 25px;
         }
 
         .zone-title { 
@@ -83,7 +97,8 @@
             font-weight: bold; 
             text-transform: uppercase; 
             letter-spacing: 2px; 
-            color: rgba(255, 215, 0, 0.6); 
+            color: rgba(255, 215, 0, 0.7); 
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
         }
 
         .score { 
@@ -94,16 +109,37 @@
             font-size: 0.8rem;
             color: #fff;
             border: 1px solid #ffd700;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
         .cards-flex { 
             display: flex; 
             justify-content: center;
+            align-items: center;
             min-height: 95px; 
             width: 100%;
             padding: 2px;
+            position: relative;
         }
 
+        /* Aligner les cartes du croupier exactement sur les rectangles du tapis */
+        #dealer-cards .card {
+            margin: 0;
+            position: absolute;
+        }
+        /* Positionnement des cartes du croupier dans les cases de 1 à 5 */
+        #dealer-cards .card:nth-child(1) { left: calc(50% - 115px); }
+        #dealer-cards .card:nth-child(2) { left: calc(50% - 65px); }
+        #dealer-cards .card:nth-child(3) { left: calc(50% - 15px); }
+        #dealer-cards .card:nth-child(4) { left: calc(50% + 35px); }
+        #dealer-cards .card:nth-child(5) { left: calc(50% + 85px); }
+
+        /* Cartes joueur en léger chevauchement classique */
+        #player-cards .card {
+            margin: 0 -12px;
+        }
+
+        /* Cartes physiques */
         .card { 
             width: 65px; 
             height: 95px; 
@@ -116,9 +152,8 @@
             padding: 5px; 
             font-weight: bold; 
             font-size: 1.1rem; 
-            box-shadow: 3px 5px 12px rgba(0,0,0,0.5); 
+            box-shadow: 3px 5px 12px rgba(0,0,0,0.6); 
             border: 1px solid #d1d1d1;
-            margin: 0 -12px; 
             transform: rotate(calc(var(--r, 0) * 1deg));
             animation: dealCard 0.4s ease-out; 
             font-family: 'Arial', sans-serif;
@@ -126,27 +161,30 @@
         .card.red { color: #cc1111; }
         .card .bottom-suit { align-self: flex-end; transform: rotate(180deg); }
         
-        /* Zone de dépôt des jetons centrale */
+        /* Zone de dépôt de la mise calée au centre */
         .bet-spot {
+            position: absolute;
+            top: 155px;
+            left: calc(50% - 27.5px);
             width: 55px;
             height: 55px;
-            border: 2px dashed rgba(255, 215, 0, 0.4);
+            border: 2px dashed rgba(255, 215, 0, 0.5);
             border-radius: 50%;
-            margin: 12px auto;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
             z-index: 2;
+            background: rgba(0, 0, 0, 0.15);
         }
         .bet-spot::before {
             content: 'MISES';
             font-size: 0.6rem;
-            color: rgba(255, 215, 0, 0.3);
+            color: rgba(255, 215, 0, 0.4);
             letter-spacing: 1px;
+            font-weight: bold;
         }
 
-        /* Design des jetons de casino */
+        /* Design des jetons */
         .token {
             width: 44px;
             height: 44px;
@@ -226,7 +264,6 @@
             -webkit-tap-highlight-color: transparent; 
         }
         button:active { transform: translateY(2px); box-shadow: 0 2px 4px rgba(0,0,0,0.4); }
-        button:disabled { background: #444 !important; border-color: #666 !important; cursor: not-allowed; opacity: 0.5; }
 
         #btn-hit { background: linear-gradient(135deg, #1e7e34 0%, #155724 100%); border-color: #28a745; }
         #btn-stand { background: linear-gradient(135deg, #bd2130 0%, #721c24 100%); border-color: #dc3545; }
@@ -249,20 +286,34 @@
     </div>
     
     <div class="table">
-        <svg class="table-felt-print" viewBox="0 0 600 400">
+        <svg class="table-felt-print" viewBox="0 0 600 380" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
-                <path id="curve-top" d="M 80,180 A 240,200 0 0,0 520,180" fill="none" />
-                <path id="curve-bottom" d="M 120,225 A 200,160 0 0,0 480,225" fill="none" />
+                <path id="text-curve-1" d="M 90,185 A 220,180 0 0,0 510,185" fill="none" />
+                <path id="text-curve-2" d="M 130,225 A 180,140 0 0,0 470,225" fill="none" />
             </defs>
-            <text font-family="Georgia, serif" font-size="14" font-weight="bold" fill="rgba(255, 215, 0, 0.35)" letter-spacing="3" text-anchor="middle">
-                <textPath href="#curve-top" startOffset="50%">BLACKJACK PAYS 3 TO 2</textPath>
+
+            <path d="M 50,150 A 260,210 0 0,0 550,150" fill="none" stroke="rgba(255, 215, 0, 0.25)" stroke-width="2" stroke-dasharray="6,4" />
+
+            <g stroke="rgba(255, 215, 0, 0.2)" stroke-width="1.5" fill="none">
+                <rect x="185" y="47" width="40" height="58" rx="3" />
+                <rect x="235" y="47" width="40" height="58" rx="3" />
+                <rect x="285" y="47" width="40" height="58" rx="3" />
+                <rect x="335" y="47" width="40" height="58" rx="3" />
+                <rect x="385" y="47" width="40" height="58" rx="3" />
+            </g>
+
+            <text font-family="Georgia, serif" font-size="13" font-weight="bold" fill="rgba(255, 215, 0, 0.35)" letter-spacing="3" text-anchor="middle">
+                <textPath href="#text-curve-1" startOffset="50%">BLACKJACK PAYS 3 TO 2</textPath>
             </text>
-            <text font-family="Georgia, serif" font-size="11" font-style="italic" fill="rgba(255, 215, 0, 0.25)" letter-spacing="2" text-anchor="middle">
-                <textPath href="#curve-bottom" startOffset="50%">Dealer must draw to 16 and stand on all 17s</textPath>
+            <text font-family="Georgia, serif" font-size="10" font-weight="bold" font-style="italic" fill="rgba(255, 215, 0, 0.22)" letter-spacing="1.5" text-anchor="middle">
+                <textPath href="#text-curve-2" startOffset="50%">Dealer must draw to 16 and stand on all 17s</textPath>
             </text>
+
+            <polygon points="140,140 144,144 140,148 136,144" fill="rgba(255, 215, 0, 0.2)" />
+            <polygon points="460,140 464,144 460,148 456,144" fill="rgba(255, 215, 0, 0.2)" />
         </svg>
 
-        <div class="zone">
+        <div class="zone zone-dealer">
             <div class="zone-title">Croupier</div>
             <div class="cards-flex" id="dealer-cards"></div>
             <div class="score" id="dealer-score">0</div>
@@ -270,10 +321,10 @@
 
         <div class="bet-spot" id="table-bet-spot"></div>
 
-        <div class="zone">
-            <div class="zone-title">Votre Main</div>
-            <div class="cards-flex" id="player-cards"></div>
+        <div class="zone zone-player">
             <div class="score" id="player-score">0</div>
+            <div class="cards-flex" id="player-cards"></div>
+            <div class="zone-title">Votre Main</div>
         </div>
     </div>
 
@@ -286,11 +337,9 @@
         <div class="token token-500" onclick="addBet(500)">500$</div>
     </div>
 
-    <div class="controls">
+    <div class="controls" id="controls-container">
         <button id="btn-clear" onclick="clearBet()">Effacer</button>
         <button id="btn-deal" onclick="startRound()">Distribuer</button>
-        <button id="btn-hit" onclick="hit()" disabled>Tirer</button>
-        <button id="btn-stand" onclick="stand()" disabled>Rester</button>
     </div>
 
     <script>
@@ -388,13 +437,14 @@
             document.getElementById('dealer-cards').innerHTML = '';
             document.getElementById('dealer-score').innerText = '0';
 
-            document.getElementById('btn-deal').style.display = 'none';
-            document.getElementById('btn-clear').style.display = 'none';
-            document.getElementById('rack').style.opacity = '0.3';
-            document.getElementById('btn-hit').disabled = false;
-            document.getElementById('btn-stand').disabled = false;
+            // Masquer les boutons de mise et afficher UNIQUEMENT Tirer / Rester
+            document.getElementById('rack').style.opacity = '0.2';
+            document.getElementById('controls-container').innerHTML = `
+                <button id="btn-hit" onclick="hit()">Tirer</button>
+                <button id="btn-stand" onclick="stand()">Rester</button>
+            `;
 
-            // Distribution
+            // Distribution dans les cases fixes
             hitCard(); hitCard();
             dealerCards.push(deck.pop());
             renderCard(dealerCards[0], 'dealer-cards');
@@ -467,11 +517,12 @@
                 updateUI();
             }
 
-            document.getElementById('btn-hit').disabled = true;
-            document.getElementById('btn-stand').disabled = true;
-            document.getElementById('btn-deal').style.display = 'block';
-            document.getElementById('btn-clear').style.display = 'block';
+            // Remettre les boutons de base "Effacer" et "Distribuer"
             document.getElementById('rack').style.opacity = '1';
+            document.getElementById('controls-container').innerHTML = `
+                <button id="btn-clear" onclick="clearBet()">Effacer</button>
+                <button id="btn-deal" onclick="startRound()">Distribuer</button>
+            `;
         }
 
         updateUI();
