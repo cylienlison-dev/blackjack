@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Casino Blackjack Pro</title>
+    <title>Casino Blackjack Royal Pro</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Georgia', serif; }
         
@@ -28,21 +28,21 @@
             letter-spacing: 3px;
         }
 
-        /* Infos de solde du joueur */
+        /* Barre d'infos de la banque */
         .bank-info {
             display: flex;
-            gap: 20px;
+            gap: 25px;
             margin-bottom: 10px;
             font-size: 1.1rem;
-            background: rgba(0,0,0,0.5);
-            padding: 8px 20px;
+            background: rgba(0,0,0,0.6);
+            padding: 8px 25px;
             border-radius: 30px;
             border: 1px solid #ffd700;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
         }
         .bank-info span { color: #ffd700; font-weight: bold; }
 
-        /* La table de Blackjack incurvée style Casino */
+        /* Table de Blackjack en arc de cercle */
         .table { 
             width: 100%; 
             max-width: 680px; 
@@ -50,16 +50,16 @@
             border: 14px solid #3d2314; 
             border-bottom-color: #2b180d;
             border-radius: 50% 50% 25px 25px / 45% 45% 25px 25px; 
-            padding: 30px 20px 25px 20px; 
+            padding: 25px 20px 20px 20px; 
             box-shadow: inset 0 0 60px rgba(0,0,0,0.9), 0 15px 35px rgba(0,0,0,0.7); 
             display: flex; 
             flex-direction: column; 
-            gap: 15px; 
+            gap: 10px; 
             position: relative;
         }
 
-        /* Inscriptions réglementaires incrustées */
-        .casino-rules {
+        /* Écritures sérigraphiées style Casino au centre */
+        .casino-rules-arc {
             text-align: center;
             color: rgba(255, 215, 0, 0.35);
             font-size: 0.75rem;
@@ -67,7 +67,8 @@
             letter-spacing: 2px;
             font-style: italic;
             border-bottom: 1px dashed rgba(255, 215, 0, 0.15);
-            padding-bottom: 10px;
+            padding-bottom: 8px;
+            margin-bottom: 5px;
             pointer-events: none;
         }
 
@@ -88,14 +89,13 @@
         }
 
         .score { 
-            background: rgba(0,0,0,0.8); 
-            padding: 2px 10px; 
+            background: rgba(0,0,0,0.85); 
+            padding: 2px 12px; 
             border-radius: 20px; 
             font-weight: bold; 
             font-size: 0.85rem;
             color: #fff;
             border: 1px solid #ffd700;
-            margin-top: 2px;
         }
 
         .cards-flex { 
@@ -106,7 +106,7 @@
             padding: 5px;
         }
 
-        /* Look des vraies cartes */
+        /* Style des cartes */
         .card { 
             width: 75px; 
             height: 110px; 
@@ -129,7 +129,7 @@
         .card.red { color: #cc1111; }
         .card .bottom-suit { align-self: flex-end; transform: rotate(180deg); }
         
-        /* Emplacement du jeton de mise sur le tapis */
+        /* Zone de dépôt des jetons sur la table */
         .bet-spot {
             width: 65px;
             height: 65px;
@@ -144,25 +144,25 @@
         .bet-spot::before {
             content: 'MISES';
             font-size: 0.65rem;
-            color: rgba(255, 215, 0, 0.3);
+            color: rgba(255, 215, 0, 0.25);
             letter-spacing: 1px;
         }
 
-        /* Design des Jetons physiques de casino */
+        /* Design des jetons de casino */
         .token {
-            width: 52px;
-            height: 52px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             border: 4px dashed #fff;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: bold;
             color: white;
             cursor: pointer;
             box-shadow: 0 4px 8px rgba(0,0,0,0.6), inset 0 0 8px rgba(0,0,0,0.4);
-            transition: transform 0.2s, cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             font-family: 'Arial', sans-serif;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
@@ -170,53 +170,55 @@
         .token:hover { transform: scale(1.1) translateY(-3px); }
         .token:active { transform: scale(0.95); }
         
-        .token-5 { background: #d12c2c; border-color: #ffd700; }  /* Rouge/Or */
-        .token-25 { background: #1a54a1; border-color: #fff; }    /* Bleu/Blanc */
-        .token-100 { background: #111; border-color: #ffd700; }   /* Noir/Or */
-        .token-500 { background: #7a1fa1; border-color: #fff; }   /* Violet/Blanc */
+        .token-5 { background: #cc2424; border-color: #ffd700; }  /* Rouge */
+        .token-25 { background: #1a54a1; border-color: #fff; }    /* Bleu */
+        .token-100 { background: #1a1a1a; border-color: #ffd700; } /* Noir */
+        .token-500 { background: #7a1fa1; border-color: #fff; }   /* Violet */
 
-        /* Pile de jetons misés */
+        /* Jeton posé dans la zone de mise */
         .bet-spot .token {
             position: absolute;
-            top: 2px;
-            left: 2px;
+            top: 3px;
+            left: 3px;
             cursor: default;
             pointer-events: none;
+            transform: none !important;
         }
 
-        /* Conteneurs pour le sélecteur de jetons */
+        /* Le présentoir à jetons (Rack) */
         .token-rack {
             display: flex;
-            gap: 12px;
+            gap: 15px;
             justify-content: center;
             margin: 10px 0;
-            background: rgba(0,0,0,0.4);
-            padding: 10px 20px;
+            background: rgba(0,0,0,0.5);
+            padding: 10px 25px;
             border-radius: 40px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.6);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         #msg { 
             text-align: center; 
-            font-size: 1.3rem; 
+            font-size: 1.25rem; 
             font-weight: bold; 
             min-height: 35px; 
-            margin: 10px 0; 
+            margin: 8px 0; 
             text-shadow: 2px 2px 4px rgba(0,0,0,0.8); 
         }
 
-        /* Boutons */
+        /* Boutons de contrôle */
         .controls { 
             display: flex; 
-            gap: 15px; 
+            gap: 12px; 
             justify-content: center; 
             width: 100%; 
-            max-width: 450px; 
+            max-width: 460px; 
         }
         button { 
             flex: 1; 
             padding: 12px; 
-            font-size: 0.95rem; 
+            font-size: 0.9rem; 
             font-weight: bold; 
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -229,12 +231,12 @@
             -webkit-tap-highlight-color: transparent; 
         }
         button:active { transform: translateY(2px); box-shadow: 0 2px 4px rgba(0,0,0,0.4); }
-        button:disabled { background: #555 !important; border-color: #777 !important; cursor: not-allowed; opacity: 0.6; }
+        button:disabled { background: #444 !important; border-color: #666 !important; cursor: not-allowed; opacity: 0.5; }
 
         #btn-hit { background: linear-gradient(135deg, #1e7e34 0%, #155724 100%); border-color: #28a745; }
         #btn-stand { background: linear-gradient(135deg, #bd2130 0%, #721c24 100%); border-color: #dc3545; }
         #btn-deal { background: linear-gradient(135deg, #007bff 0%, #004085 100%); border-color: #0056b3; }
-        #btn-clear { background: #6c757d; border-color: #888; }
+        #btn-clear { background: #5a6268; border-color: #777; }
 
         @keyframes dealCard { 
             0% { transform: translateY(-120px) rotate(-15deg); opacity: 0; } 
@@ -252,7 +254,7 @@
     </div>
     
     <div class="table">
-        <div class="casino-rules">La Banque reste à 17 — Blackjack paie 3 pour 2</div>
+        <div class="casino-rules-arc">La Banque reste à 17 — Le Blackjack paie 3 pour 2 — Assurance paie 2 contre 1</div>
 
         <div class="zone">
             <div class="zone-title">Croupier</div>
@@ -272,10 +274,10 @@
     <div id="msg">Placez vos jetons pour miser !</div>
 
     <div class="token-rack" id="rack">
-        <div class="token token-5" onclick="addBet(5)">5</div>
-        <div class="token token-25" onclick="addBet(25)">25</div>
-        <div class="token token-100" onclick="addBet(100)">100</div>
-        <div class="token token-500" onclick="addBet(500)">500</div>
+        <div class="token token-5" onclick="addBet(5)">5$</div>
+        <div class="token token-25" onclick="addBet(25)">25$</div>
+        <div class="token token-100" onclick="addBet(100)">100$</div>
+        <div class="token token-500" onclick="addBet(500)">500$</div>
     </div>
 
     <div class="controls">
@@ -331,7 +333,6 @@
             document.getElementById('balance-val').innerText = balance;
             document.getElementById('bet-val').innerText = currentBet;
             
-            // Affichage du jeton visuel au milieu de la table
             const spot = document.getElementById('table-bet-spot');
             spot.innerHTML = '';
             if (currentBet > 0) {
@@ -341,7 +342,7 @@
                 if (currentBet >= 100) tokenClass = 'token-100';
                 if (currentBet >= 500) tokenClass = 'token-500';
                 visualToken.className = `token ${tokenClass}`;
-                visualToken.innerText = currentBet;
+                visualToken.innerText = currentBet + "$";
                 spot.appendChild(visualToken);
             }
         }
@@ -369,7 +370,7 @@
         function startRound() {
             if (inRound) return;
             if (currentBet === 0) {
-                document.getElementById('msg').innerText = "Vous devez miser au moins un jeton ! 🪙";
+                document.getElementById('msg').innerText = "Misez des jetons avant de jouer ! 🪙";
                 return;
             }
 
@@ -383,11 +384,11 @@
 
             document.getElementById('btn-deal').style.display = 'none';
             document.getElementById('btn-clear').style.display = 'none';
-            document.getElementById('rack').style.opacity = '0.4';
+            document.getElementById('rack').style.opacity = '0.3';
             document.getElementById('btn-hit').disabled = false;
             document.getElementById('btn-stand').disabled = false;
 
-            // Distribution initiale
+            // Distribution
             hitCard(); hitCard();
             dealerCards.push(deck.pop());
             renderCard(dealerCards[0], 'dealer-cards');
@@ -395,7 +396,6 @@
             document.getElementById('player-score').innerText = getScore(playerCards);
             document.getElementById('dealer-score').innerText = getScore(dealerCards);
 
-            // Vérification Blackjack immédiat du joueur
             if (getScore(playerCards) === 21) {
                 stand();
             } else {
@@ -423,7 +423,6 @@
         function stand() {
             if (!inRound) return;
 
-            // Le croupier joue
             while (getScore(dealerCards) < 17) {
                 let card = deck.pop();
                 dealerCards.push(card);
@@ -435,9 +434,7 @@
             let pScore = getScore(playerCards);
             let dScore = getScore(dealerCards);
 
-            // Calcul des gains
             if (pScore === 21 && playerCards.length === 2 && !(dScore === 21 && dealerCards.length === 2)) {
-                // Blackjack naturel paie 3 pour 2
                 endRound("BLACKJACK ! Magnifique ! 🎉", Math.floor(currentBet * 2.5));
             } else if (dScore > 21) {
                 endRound("Gagné ! Le croupier a sauté. 👑", currentBet * 2);
@@ -458,10 +455,9 @@
             document.getElementById('msg').innerText = message;
             updateUI();
 
-            // Si le joueur est totalement ruiné, on lui offre une recharge de secours
             if (balance === 0) {
                 balance = 500;
-                document.getElementById('msg').innerText = "Ruiné ! Le casino vous offre une recharge de 500 $ 🎁";
+                document.getElementById('msg').innerText = "Ruiné ! Le casino vous réapprovisionne de 500 $ 🎁";
                 updateUI();
             }
 
