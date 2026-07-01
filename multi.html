@@ -8,78 +8,70 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Georgia', serif; }
         body { background: radial-gradient(circle, #1a1a1a 0%, #0a0a0a 100%); color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 10px; overflow-x: hidden; }
-        .home-btn { position: absolute; top: 15px; left: 15px; background: rgba(255, 255, 255, 0.1); color: white; padding: 8px 12px; border-radius: 50%; text-decoration: none; font-size: 1.2rem; border: 1px solid #ffd700; z-index: 10; transition: 0.3s; }
-        .home-btn:hover { background: rgba(255, 255, 255, 0.2); }
-        h1 { margin: 5px 0; font-size: 1.4rem; color: #ffd700; text-shadow: 0px 2px 4px rgba(0,0,0,0.8); text-align: center; font-weight: normal; letter-spacing: 3px; }
-        .bank-info { display: flex; gap: 25px; margin-bottom: 10px; font-size: 0.95rem; background: rgba(0,0,0,0.6); padding: 6px 25px; border-radius: 30px; border: 1px solid #ffd700; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
-        .bank-info span { color: #ffd700; font-weight: bold; }
-        .table { width: 100%; max-width: 800px; background: radial-gradient(circle, #0e5c33 60%, #073a1f 100%); border: 12px solid #3d2314; border-bottom-color: #2b180d; border-radius: 40px; padding: 20px; box-shadow: inset 0 0 50px rgba(0,0,0,0.9), 0 12px 25px rgba(0,0,0,0.7); display: flex; flex-direction: column; position: relative; height: 440px; margin-bottom: 10px; }
-        .table-felt-print { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
-        .zone-dealer { position: absolute; top: 20px; left: 0; width: 100%; display: flex; flex-direction: column; align-items: center; z-index: 2; }
-        .players-container { position: absolute; bottom: 15px; left: 0; width: 100%; display: flex; justify-content: space-around; padding: 0 10px; z-index: 2; gap: 5px; }
-        .player-spot { display: flex; flex-direction: column; align-items: center; gap: 4px; background: rgba(0,0,0,0.4); padding: 6px; border-radius: 8px; border: 1px solid rgba(255, 215, 0, 0.1); flex: 1; max-width: 140px; min-width: 85px; position: relative; }
-        .player-spot.current-user { border-color: #ffd700; background: rgba(255, 215, 0, 0.08); }
-        .zone-title { font-size: 0.7rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: rgba(255, 215, 0, 0.9); text-shadow: 1px 1px 2px rgba(0,0,0,0.6); text-align: center; }
-        .score { background: rgba(0,0,0,0.85); padding: 1px 6px; border-radius: 20px; font-weight: bold; font-size: 0.7rem; color: #fff; border: 1px solid #ffd700; }
-        .cards-flex { display: flex; justify-content: center; align-items: center; min-height: 70px; width: 100%; position: relative; }
-        .card { width: 42px; height: 64px; background: #ffffff; color: #111111; border-radius: 4px; display: flex; flex-direction: column; justify-content: space-between; padding: 3px; font-weight: bold; font-size: 0.8rem; box-shadow: 2px 4px 6px rgba(0,0,0,0.5); border: 1px solid #d1d1d1; margin: 0 -12px; font-family: 'Arial', sans-serif; animation: dealCard 0.3s ease-out; }
-        .card.red { color: #cc1111; }
-        .card .bottom-suit { transform: rotate(180deg); align-self: flex-end; }
-        .player-bet-spot { width: 30px; height: 30px; border: 1.5px dashed rgba(255, 215, 0, 0.5); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; background: rgba(0,0,0,0.5); font-weight: bold; color: #ffd700; }
-        .token { width: 42px; height: 42px; border-radius: 50%; border: 3px dashed #fff; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; color: white; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.5), inset 0 0 6px rgba(0,0,0,0.4); font-family: 'Arial', sans-serif; user-select: none; }
-        .token-5 { background: #cc2424; border-color: #ffd700; }  
-        .token-25 { background: #1a54a1; border-color: #fff; }    
-        .token-100 { background: #1a1a1a; border-color: #ffd700; } 
-        .token-500 { background: #7a1fa1; border-color: #fff; }   
-        .token-rack { display: flex; gap: 10px; justify-content: center; margin: 5px 0; background: rgba(0,0,0,0.5); padding: 6px 15px; border-radius: 40px; }
-        #msg { text-align: center; font-size: 1rem; font-weight: bold; min-height: 24px; margin: 5px 0; color: #ffd700; }
-        .controls { display: flex; gap: 10px; justify-content: center; width: 100%; max-width: 400px; padding: 0 10px; }
-        button { flex: 1; padding: 10px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; border: 2px solid rgba(255,255,255,0.2); border-radius: 30px; cursor: pointer; color: white; }
-        #btn-hit { background: linear-gradient(135deg, #1e7e34 0%, #155724 100%); border-color: #28a745; }
-        #btn-stand { background: linear-gradient(135deg, #bd2130 0%, #721c24 100%); border-color: #dc3545; }
-        #btn-deal { background: linear-gradient(135deg, #007bff 0%, #004085 100%); border-color: #0056b3; }
-        #btn-clear { background: #5a6268; border-color: #777; }
-        @keyframes dealCard { 0% { transform: translateY(-50px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+        .login-screen { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:100; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+        .home-btn { position: absolute; top: 15px; left: 15px; background: rgba(255, 255, 255, 0.1); color: white; padding: 8px 12px; border-radius: 50%; text-decoration: none; font-size: 1.2rem; border: 1px solid #ffd700; z-index: 10; }
+        h1 { font-size: 1.4rem; color: #ffd700; text-align: center; margin-bottom: 20px; }
+        input { padding: 10px; border-radius: 20px; border: 1px solid #ffd700; background: #000; color: #fff; text-align: center; margin-bottom: 15px; }
+        button.join-btn { padding: 10px 30px; background: #1e7e34; border: none; color: white; border-radius: 20px; cursor: pointer; font-weight: bold; }
+        .bank-info { display: flex; gap: 25px; margin-bottom: 10px; font-size: 0.95rem; background: rgba(0,0,0,0.6); padding: 6px 25px; border-radius: 30px; border: 1px solid #ffd700; }
+        .table { width: 100%; max-width: 800px; background: radial-gradient(circle, #0e5c33 60%, #073a1f 100%); border: 12px solid #3d2314; border-radius: 40px; padding: 20px; height: 440px; position: relative; }
+        .zone-dealer { position: absolute; top: 20px; left: 0; width: 100%; display: flex; flex-direction: column; align-items: center; }
+        .players-container { position: absolute; bottom: 15px; left: 0; width: 100%; display: flex; justify-content: space-around; padding: 0 10px; }
+        .player-spot { display: flex; flex-direction: column; align-items: center; background: rgba(0,0,0,0.4); padding: 6px; border-radius: 8px; border: 1px solid rgba(255, 215, 0, 0.1); width: 100px; }
+        .player-spot.current-user { border-color: #ffd700; }
+        .zone-title { font-size: 0.7rem; font-weight: bold; color: #ffd700; }
+        .card { width: 40px; height: 60px; background: #fff; color: #000; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; margin: 0 -10px; }
+        .token-rack { display: flex; gap: 10px; justify-content: center; margin: 10px 0; }
+        .controls { display: flex; gap: 10px; justify-content: center; }
     </style>
 </head>
 <body>
+    <div id="login-screen" class="login-screen">
+        <h1>CHOISIS TON PSEUDO</h1>
+        <input type="text" id="username-input" placeholder="Ton pseudo..." maxlength="10">
+        <button class="join-btn" onclick="joinGame()">ENTRER</button>
+    </div>
+
     <a href="index.html" class="home-btn">🏠</a>
     <h1>CASINO ROYALE</h1>
     <div class="bank-info">
-        <div>Votre Solde : <span id="balance-val">1000</span> $</div>
-        <div>Votre Mise : <span id="bet-val">0</span> $</div>
+        <div>Solde : <span id="balance-val">1000</span> $</div>
+        <div>Mise : <span id="bet-val">0</span> $</div>
     </div>
     <div class="table">
-        <svg class="table-felt-print" viewBox="0 0 800 440" preserveAspectRatio="xMidYMid meet"><defs><path id="text-curve" d="M 150,230 A 250,180 0 0,0 650,230" fill="none" /></defs><path d="M 120,190 A 280,200 0 0,0 680,190" fill="none" stroke="rgba(255, 215, 0, 0.15)" stroke-width="2" stroke-dasharray="6,4" /><text font-family="Georgia, serif" font-size="16" font-weight="bold" fill="rgba(255, 215, 0, 0.2)" letter-spacing="4" text-anchor="middle"><textPath href="#text-curve" startOffset="50%">BLACKJACK PAYS 3 TO 2</textPath></text></svg>
-        <div class="zone-dealer"><div class="zone-title">Croupier (<span id="dealer-score">0</span>)</div><div class="cards-flex" id="dealer-cards"></div></div>
+        <div class="zone-dealer"><div class="zone-title">Croupier (<span id="dealer-score">0</span>)</div><div id="dealer-cards" style="display:flex"></div></div>
         <div class="players-container" id="players-box"></div>
     </div>
-    <div id="msg">Connexion au serveur...</div>
-    <div class="token-rack" id="rack"><div class="token token-5" onclick="sendBet(5)">5$</div><div class="token token-25" onclick="sendBet(25)">25$</div><div class="token token-100" onclick="sendBet(100)">100$</div><div class="token token-500" onclick="sendBet(500)">500$</div></div>
-    <div class="controls" id="controls-container"><button id="btn-clear" onclick="clearBet()">Effacer</button><button id="btn-deal" onclick="startRound()">Distribuer</button></div>
+    <div id="msg">En attente...</div>
+    <div class="token-rack" id="rack"><button onclick="sendBet(5)">5$</button><button onclick="sendBet(25)">25$</button></div>
+    <div class="controls" id="controls-container"><button onclick="clearBet()">Effacer</button><button onclick="startRound()">Distribuer</button></div>
+
     <script>
-        const SERVEUR_URL = "https://blackjack-8uar.onrender.com"; 
-        const socket = io(SERVEUR_URL); let myId = null;
-        socket.on('connect', () => { myId = socket.id; document.getElementById('msg').innerText = "Connecté ! Place tes jetons."; });
+        const socket = io("https://blackjack-8uar.onrender.com");
+        let myId = null;
+        function joinGame() {
+            const pseudo = document.getElementById('username-input').value || "Anonyme";
+            socket.emit('setPseudo', pseudo);
+            document.getElementById('login-screen').style.display = 'none';
+        }
+        socket.on('connect', () => { myId = socket.id; });
         socket.on('gameState', (state) => {
             document.getElementById('dealer-score').innerText = state.dealerScore;
-            const dCardsBox = document.getElementById('dealer-cards'); dCardsBox.innerHTML = '';
-            state.dealerCards.forEach(c => dCardsBox.appendChild(createCardUI(c)));
-            const playersBox = document.getElementById('players-box'); playersBox.innerHTML = '';
+            document.getElementById('dealer-cards').innerHTML = '';
+            state.dealerCards.forEach(c => {
+                let div = document.createElement('div'); div.className = 'card'; div.innerText = c.value;
+                document.getElementById('dealer-cards').appendChild(div);
+            });
+            const pBox = document.getElementById('players-box'); pBox.innerHTML = '';
             Object.values(state.players).forEach(p => {
                 const isMe = p.id === myId;
                 if(isMe) { document.getElementById('balance-val').innerText = p.balance; document.getElementById('bet-val').innerText = p.bet; }
-                const pSpot = document.createElement('div'); pSpot.className = `player-spot ${isMe ? 'current-user' : ''}`;
-                const cardsFlex = document.createElement('div'); cardsFlex.className = 'cards-flex'; p.cards.forEach(c => cardsFlex.appendChild(createCardUI(c)));
-                pSpot.innerHTML = `<div class="zone-title">${isMe ? 'Moi' : p.name}</div><div class="score">${p.score}</div><div class="player-bet-spot">${isMe ? (p.bet > 0 ? p.bet + '$' : 'Mise') : '***'}</div>`;
-                pSpot.insertBefore(cardsFlex, pSpot.children[1]); playersBox.appendChild(pSpot);
+                pBox.innerHTML += `<div class="player-spot ${isMe ? 'current-user' : ''}"><div class="zone-title">${p.name}</div><div>${p.score}</div><div class="zone-title">${isMe ? p.bet+'$' : '***'}</div></div>`;
             });
-            if (state.status === 'betting') { document.getElementById('controls-container').innerHTML = `<button id="btn-clear" onclick="clearBet()">Effacer</button><button id="btn-deal" onclick="startRound()">Distribuer</button>`; }
-            else if (state.status === 'playing') { document.getElementById('controls-container').innerHTML = (state.players[myId]?.status === 'playing') ? `<button id="btn-hit" onclick="hit()">Tirer</button><button id="btn-stand" onclick="stand()">Rester</button>` : ''; }
-            else { document.getElementById('controls-container').innerHTML = ''; }
         });
-        function createCardUI(card) { const cardEl = document.createElement('div'); cardEl.className = `card ${card.isRed ? 'red' : ''}`; cardEl.innerHTML = `<div>${card.value}<br>${card.suit}</div><div class="bottom-suit">${card.value}<br>${card.suit}</div>`; return cardEl; }
-        function sendBet(a) { socket.emit('placeBet', a); } function clearBet() { socket.emit('clearBet'); } function startRound() { socket.emit('startRound'); } function hit() { socket.emit('hit'); } function stand() { socket.emit('stand'); }
+        function sendBet(a) { socket.emit('placeBet', a); }
+        function clearBet() { socket.emit('clearBet'); }
+        function startRound() { socket.emit('startRound'); }
     </script>
 </body>
 </html>
