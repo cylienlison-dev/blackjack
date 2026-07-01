@@ -16,7 +16,7 @@
             justify-content: center;
             min-height: 100vh; 
             padding: 10px;
-            overflow: hidden; /* Empêche le défilement inutile */
+            overflow: hidden;
         }
 
         h1 { 
@@ -29,7 +29,6 @@
             letter-spacing: 3px;
         }
 
-        /* Barre d'infos de la banque */
         .bank-info {
             display: flex;
             gap: 25px;
@@ -43,7 +42,7 @@
         }
         .bank-info span { color: #ffd700; font-weight: bold; }
 
-        /* Table de Blackjack optimisée en hauteur pour PC */
+        /* Table de Blackjack */
         .table { 
             width: 100%; 
             max-width: 620px; 
@@ -51,26 +50,23 @@
             border: 12px solid #3d2314; 
             border-bottom-color: #2b180d;
             border-radius: 50% 50% 25px 25px / 45% 45% 25px 25px; 
-            padding: 15px 20px; 
+            padding: 20px 20px 15px 20px; 
             box-shadow: inset 0 0 60px rgba(0,0,0,0.9), 0 15px 35px rgba(0,0,0,0.7); 
             display: flex; 
             flex-direction: column; 
-            gap: 5px; 
+            gap: 2px; 
             position: relative;
         }
 
-        /* Écritures sérigraphiées style Casino au centre */
-        .casino-rules-arc {
-            text-align: center;
-            color: rgba(255, 215, 0, 0.4);
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-style: italic;
-            border-bottom: 1px dashed rgba(255, 215, 0, 0.15);
-            padding-bottom: 5px;
-            margin-bottom: 2px;
+        /* Conteneur pour le texte courbé en fond de table */
+        .table-felt-print {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             pointer-events: none;
+            z-index: 1;
         }
 
         .zone { 
@@ -79,6 +75,7 @@
             flex-direction: column; 
             align-items: center;
             gap: 2px;
+            z-index: 2; /* Passe au-dessus des écritures de la table */
         }
 
         .zone-title { 
@@ -102,12 +99,11 @@
         .cards-flex { 
             display: flex; 
             justify-content: center;
-            min-height: 95px; /* Légèrement réduit pour faire remonter le tout */
+            min-height: 95px; 
             width: 100%;
             padding: 2px;
         }
 
-        /* Style des cartes */
         .card { 
             width: 65px; 
             height: 95px; 
@@ -130,22 +126,23 @@
         .card.red { color: #cc1111; }
         .card .bottom-suit { align-self: flex-end; transform: rotate(180deg); }
         
-        /* Zone de dépôt des jetons sur la table */
+        /* Zone de dépôt des jetons centrale */
         .bet-spot {
             width: 55px;
             height: 55px;
             border: 2px dashed rgba(255, 215, 0, 0.4);
             border-radius: 50%;
-            margin: 2px auto;
+            margin: 12px auto;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
+            z-index: 2;
         }
         .bet-spot::before {
             content: 'MISES';
             font-size: 0.6rem;
-            color: rgba(255, 215, 0, 0.25);
+            color: rgba(255, 215, 0, 0.3);
             letter-spacing: 1px;
         }
 
@@ -176,7 +173,6 @@
         .token-100 { background: #1a1a1a; border-color: #ffd700; } 
         .token-500 { background: #7a1fa1; border-color: #fff; }   
 
-        /* Jeton posé dans la zone de mise */
         .bet-spot .token {
             position: absolute;
             top: 3px;
@@ -186,7 +182,6 @@
             transform: none !important;
         }
 
-        /* Le présentoir à jetons (Rack) */
         .token-rack {
             display: flex;
             gap: 12px;
@@ -208,7 +203,6 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.8); 
         }
 
-        /* Boutons de contrôle */
         .controls { 
             display: flex; 
             gap: 10px; 
@@ -255,7 +249,18 @@
     </div>
     
     <div class="table">
-        <div class="casino-rules-arc">La Banque reste à 17 — Le Blackjack paie 3 pour 2 — Assurance paie 2 contre 1</div>
+        <svg class="table-felt-print" viewBox="0 0 600 400">
+            <defs>
+                <path id="curve-top" d="M 80,180 A 240,200 0 0,0 520,180" fill="none" />
+                <path id="curve-bottom" d="M 120,225 A 200,160 0 0,0 480,225" fill="none" />
+            </defs>
+            <text font-family="Georgia, serif" font-size="14" font-weight="bold" fill="rgba(255, 215, 0, 0.35)" letter-spacing="3" text-anchor="middle">
+                <textPath href="#curve-top" startOffset="50%">BLACKJACK PAYS 3 TO 2</textPath>
+            </text>
+            <text font-family="Georgia, serif" font-size="11" font-style="italic" fill="rgba(255, 215, 0, 0.25)" letter-spacing="2" text-anchor="middle">
+                <textPath href="#curve-bottom" startOffset="50%">Dealer must draw to 16 and stand on all 17s</textPath>
+            </text>
+        </svg>
 
         <div class="zone">
             <div class="zone-title">Croupier</div>
