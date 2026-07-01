@@ -2,27 +2,34 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Blackjack Solo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackjack Casino</title>
     <style>
-        body { background-color: #0e5c33; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; font-family: Arial, sans-serif; }
-        .table { width: 80%; max-width: 600px; background: #0a4d29; border: 10px solid #3d2314; padding: 20px; border-radius: 20px; text-align: center; }
-        .cards { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
-        .card { width: 50px; height: 75px; background: white; color: black; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-        .controls { margin-top: 20px; }
-        button { padding: 10px 20px; cursor: pointer; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Georgia', serif; }
+        body { background: radial-gradient(circle, #1a1a1a 0%, #0a0a0a 100%); color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 10px; }
+        h1 { color: #ffd700; margin-bottom: 20px; letter-spacing: 3px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .table { width: 100%; max-width: 600px; background: radial-gradient(circle, #0e5c33 60%, #073a1f 100%); border: 12px solid #3d2314; border-radius: 40px; padding: 20px; box-shadow: inset 0 0 50px rgba(0,0,0,0.9), 0 12px 25px rgba(0,0,0,0.7); display: flex; flex-direction: column; align-items: center; }
+        .cards { display: flex; justify-content: center; gap: 10px; margin: 20px 0; height: 100px; }
+        .card { width: 60px; height: 90px; background: white; color: black; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .controls { display: flex; gap: 10px; margin-top: 20px; }
+        button { padding: 12px 25px; font-size: 1rem; font-weight: bold; text-transform: uppercase; border-radius: 30px; border: 2px solid #ffd700; background: #2b180d; color: #ffd700; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #ffd700; color: #000; }
+        #message { margin-top: 20px; font-weight: bold; color: #ffd700; font-size: 1.2rem; }
     </style>
 </head>
 <body>
+
+    <h1>CASINO ROYALE</h1>
+    
     <div class="table">
-        <h1>Blackjack</h1>
-        <div id="dealer-area">
-            <h3>Croupier</h3>
-            <div id="dealer-cards" class="cards"></div>
-        </div>
-        <div id="player-area">
-            <h3>Joueur</h3>
-            <div id="player-cards" class="cards"></div>
-        </div>
+        <div>Croupier</div>
+        <div id="dealer-cards" class="cards"></div>
+        
+        <div>Joueur</div>
+        <div id="player-cards" class="cards"></div>
+        
+        <div id="message"></div>
+        
         <div class="controls">
             <button onclick="hit()">Tirer</button>
             <button onclick="stand()">Rester</button>
@@ -40,25 +47,9 @@
             const values = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
             deck = [];
             for (let s of suits) {
-                for (let v of values) {
-                    deck.push({value: v, suit: s});
-                }
+                for (let v of values) deck.push({value: v, suit: s});
             }
             deck.sort(() => Math.random() - 0.5);
-        }
-
-        function hit() {
-            playerHand.push(deck.pop());
-            updateDisplay();
-            if (calculateScore(playerHand) > 21) alert("Perdu !");
-        }
-
-        function stand() {
-            while (calculateScore(dealerHand) < 17) {
-                dealerHand.push(deck.pop());
-            }
-            updateDisplay();
-            checkWinner();
         }
 
         function calculateScore(hand) {
@@ -78,19 +69,30 @@
             document.getElementById('dealer-cards').innerHTML = dealerHand.map(c => `<div class="card">${c.value}${c.suit}</div>`).join('');
         }
 
+        function hit() {
+            playerHand.push(deck.pop());
+            updateDisplay();
+            if (calculateScore(playerHand) > 21) {
+                document.getElementById('message').innerText = "Tu as dépassé 21, Perdu !";
+            }
+        }
+
+        function stand() {
+            while (calculateScore(dealerHand) < 17) dealerHand.push(deck.pop());
+            updateDisplay();
+            let pScore = calculateScore(playerHand);
+            let dScore = calculateScore(dealerHand);
+            if (dScore > 21 || pScore > dScore) document.getElementById('message').innerText = "Gagné !";
+            else if (pScore < dScore) document.getElementById('message').innerText = "Perdu !";
+            else document.getElementById('message').innerText = "Égalité !";
+        }
+
         function newGame() {
             createDeck();
             playerHand = [deck.pop(), deck.pop()];
             dealerHand = [deck.pop()];
+            document.getElementById('message').innerText = "";
             updateDisplay();
-        }
-
-        function checkWinner() {
-            let pScore = calculateScore(playerHand);
-            let dScore = calculateScore(dealerHand);
-            if (dScore > 21 || pScore > dScore) alert("Gagné !");
-            else if (pScore < dScore) alert("Perdu !");
-            else alert("Égalité !");
         }
 
         newGame();
