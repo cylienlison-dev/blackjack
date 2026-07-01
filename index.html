@@ -1,1 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Blackjack Solo</title>
+    <style>
+        body { background-color: #0e5c33; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; font-family: Arial, sans-serif; }
+        .table { width: 80%; max-width: 600px; background: #0a4d29; border: 10px solid #3d2314; padding: 20px; border-radius: 20px; text-align: center; }
+        .cards { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
+        .card { width: 50px; height: 75px; background: white; color: black; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .controls { margin-top: 20px; }
+        button { padding: 10px 20px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="table">
+        <h1>Blackjack</h1>
+        <div id="dealer-area">
+            <h3>Croupier</h3>
+            <div id="dealer-cards" class="cards"></div>
+        </div>
+        <div id="player-area">
+            <h3>Joueur</h3>
+            <div id="player-cards" class="cards"></div>
+        </div>
+        <div class="controls">
+            <button onclick="hit()">Tirer</button>
+            <button onclick="stand()">Rester</button>
+            <button onclick="newGame()">Nouvelle partie</button>
+        </div>
+    </div>
 
+    <script>
+        let deck = [];
+        let playerHand = [];
+        let dealerHand = [];
+
+        function createDeck() {
+            const suits = ['♠', '♥', '♦', '♣'];
+            const values = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
+            deck = [];
+            for (let s of suits) {
+                for (let v of values) {
+                    deck.push({value: v, suit: s});
+                }
+            }
+            deck.sort(() => Math.random() - 0.5);
+        }
+
+        function hit() {
+            playerHand.push(deck.pop());
+            updateDisplay();
+            if (calculateScore(playerHand) > 21) alert("Perdu !");
+        }
+
+        function stand() {
+            while (calculateScore(dealerHand) < 17) {
+                dealerHand.push(deck.pop());
+            }
+            updateDisplay();
+            checkWinner();
+        }
+
+        function calculateScore(hand) {
+            let score = 0;
+            let aces = 0;
+            hand.forEach(card => {
+                if (['J', 'Q', 'K'].includes(card.value)) score += 10;
+                else if (card.value === 'A') { score += 11; aces++; }
+                else score += parseInt(card.value);
+            });
+            while (score > 21 && aces > 0) { score -= 10; aces--; }
+            return score;
+        }
+
+        function updateDisplay() {
+            document.getElementById('player-cards').innerHTML = playerHand.map(c => `<div class="card">${c.value}${c.suit}</div>`).join('');
+            document.getElementById('dealer-cards').innerHTML = dealerHand.map(c => `<div class="card">${c.value}${c.suit}</div>`).join('');
+        }
+
+        function newGame() {
+            createDeck();
+            playerHand = [deck.pop(), deck.pop()];
+            dealerHand = [deck.pop()];
+            updateDisplay();
+        }
+
+        function checkWinner() {
+            let pScore = calculateScore(playerHand);
+            let dScore = calculateScore(dealerHand);
+            if (dScore > 21 || pScore > dScore) alert("Gagné !");
+            else if (pScore < dScore) alert("Perdu !");
+            else alert("Égalité !");
+        }
+
+        newGame();
+    </script>
+</body>
+</html>
