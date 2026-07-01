@@ -13,14 +13,15 @@
             display: flex; 
             flex-direction: column; 
             align-items: center; 
+            justify-content: center;
             min-height: 100vh; 
             padding: 10px;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
         h1 { 
-            margin: 10px 0;
-            font-size: 1.6rem; 
+            margin: 2px 0 5px 0;
+            font-size: 1.4rem; 
             color: #ffd700;
             text-shadow: 0px 2px 4px rgba(0,0,0,0.8); 
             text-align: center; 
@@ -28,48 +29,44 @@
             letter-spacing: 3px;
         }
 
-        /* Barre d'infos de la banque */
         .bank-info {
             display: flex;
             gap: 25px;
-            margin-bottom: 10px;
-            font-size: 1.1rem;
+            margin-bottom: 8px;
+            font-size: 1rem;
             background: rgba(0,0,0,0.6);
-            padding: 8px 25px;
+            padding: 6px 25px;
             border-radius: 30px;
             border: 1px solid #ffd700;
             box-shadow: 0 4px 12px rgba(0,0,0,0.5);
         }
         .bank-info span { color: #ffd700; font-weight: bold; }
 
-        /* Table de Blackjack en arc de cercle */
+        /* Superbe Table de Blackjack style Casino Réaliste */
         .table { 
             width: 100%; 
-            max-width: 680px; 
+            max-width: 620px; 
             background: radial-gradient(circle, #0e5c33 60%, #073a1f 100%); 
             border: 14px solid #3d2314; 
             border-bottom-color: #2b180d;
             border-radius: 50% 50% 25px 25px / 45% 45% 25px 25px; 
-            padding: 25px 20px 20px 20px; 
-            box-shadow: inset 0 0 60px rgba(0,0,0,0.9), 0 15px 35px rgba(0,0,0,0.7); 
+            padding: 20px 20px 15px 20px; 
+            box-shadow: inset 0 0 70px rgba(0,0,0,1), 0 15px 35px rgba(0,0,0,0.8); 
             display: flex; 
             flex-direction: column; 
-            gap: 10px; 
+            gap: 2px; 
             position: relative;
         }
 
-        /* Écritures sérigraphiées style Casino au centre */
-        .casino-rules-arc {
-            text-align: center;
-            color: rgba(255, 215, 0, 0.35);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-style: italic;
-            border-bottom: 1px dashed rgba(255, 215, 0, 0.15);
-            padding-bottom: 8px;
-            margin-bottom: 5px;
+        /* Sérigraphie complète du tapis de jeu (Lignes, Textes et Emplacements de cartes) */
+        .table-felt-print {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             pointer-events: none;
+            z-index: 1;
         }
 
         .zone { 
@@ -77,51 +74,54 @@
             display: flex; 
             flex-direction: column; 
             align-items: center;
-            gap: 5px;
+            gap: 2px;
+            z-index: 2; 
         }
 
         .zone-title { 
-            font-size: 0.8rem; 
+            font-size: 0.75rem; 
             font-weight: bold; 
             text-transform: uppercase; 
             letter-spacing: 2px; 
-            color: rgba(255, 215, 0, 0.6); 
+            color: rgba(255, 215, 0, 0.7); 
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
         }
 
         .score { 
             background: rgba(0,0,0,0.85); 
-            padding: 2px 12px; 
+            padding: 1px 10px; 
             border-radius: 20px; 
             font-weight: bold; 
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: #fff;
             border: 1px solid #ffd700;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
         .cards-flex { 
             display: flex; 
             justify-content: center;
-            min-height: 115px;
+            min-height: 95px; 
             width: 100%;
-            padding: 5px;
+            padding: 2px;
         }
 
-        /* Style des cartes */
+        /* Cartes physiques */
         .card { 
-            width: 75px; 
-            height: 110px; 
+            width: 65px; 
+            height: 95px; 
             background: #ffffff; 
             color: #111111; 
             border-radius: 6px; 
             display: flex; 
             flex-direction: column; 
             justify-content: space-between; 
-            padding: 6px; 
+            padding: 5px; 
             font-weight: bold; 
-            font-size: 1.2rem; 
-            box-shadow: 3px 5px 12px rgba(0,0,0,0.5); 
+            font-size: 1.1rem; 
+            box-shadow: 3px 5px 12px rgba(0,0,0,0.6); 
             border: 1px solid #d1d1d1;
-            margin: 0 -10px; 
+            margin: 0 -12px; 
             transform: rotate(calc(var(--r, 0) * 1deg));
             animation: dealCard 0.4s ease-out; 
             font-family: 'Arial', sans-serif;
@@ -129,35 +129,38 @@
         .card.red { color: #cc1111; }
         .card .bottom-suit { align-self: flex-end; transform: rotate(180deg); }
         
-        /* Zone de dépôt des jetons sur la table */
+        /* Zone de dépôt de la mise */
         .bet-spot {
-            width: 65px;
-            height: 65px;
-            border: 2px dashed rgba(255, 215, 0, 0.4);
+            width: 55px;
+            height: 55px;
+            border: 2px dashed rgba(255, 215, 0, 0.5);
             border-radius: 50%;
-            margin: 5px auto;
+            margin: 10px auto;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
+            z-index: 2;
+            background: rgba(0, 0, 0, 0.15);
         }
         .bet-spot::before {
             content: 'MISES';
-            font-size: 0.65rem;
-            color: rgba(255, 215, 0, 0.25);
+            font-size: 0.6rem;
+            color: rgba(255, 215, 0, 0.4);
             letter-spacing: 1px;
+            font-weight: bold;
         }
 
-        /* Design des jetons de casino */
+        /* Design des jetons */
         .token {
-            width: 50px;
-            height: 50px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            border: 4px dashed #fff;
+            border: 3px dashed #fff;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             font-weight: bold;
             color: white;
             cursor: pointer;
@@ -167,15 +170,14 @@
             user-select: none;
             -webkit-tap-highlight-color: transparent;
         }
-        .token:hover { transform: scale(1.1) translateY(-3px); }
+        .token:hover { transform: scale(1.1) translateY(-2px); }
         .token:active { transform: scale(0.95); }
         
-        .token-5 { background: #cc2424; border-color: #ffd700; }  /* Rouge */
-        .token-25 { background: #1a54a1; border-color: #fff; }    /* Bleu */
-        .token-100 { background: #1a1a1a; border-color: #ffd700; } /* Noir */
-        .token-500 { background: #7a1fa1; border-color: #fff; }   /* Violet */
+        .token-5 { background: #cc2424; border-color: #ffd700; }  
+        .token-25 { background: #1a54a1; border-color: #fff; }    
+        .token-100 { background: #1a1a1a; border-color: #ffd700; } 
+        .token-500 { background: #7a1fa1; border-color: #fff; }   
 
-        /* Jeton posé dans la zone de mise */
         .bet-spot .token {
             position: absolute;
             top: 3px;
@@ -185,14 +187,13 @@
             transform: none !important;
         }
 
-        /* Le présentoir à jetons (Rack) */
         .token-rack {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             justify-content: center;
-            margin: 10px 0;
+            margin: 8px 0;
             background: rgba(0,0,0,0.5);
-            padding: 10px 25px;
+            padding: 8px 20px;
             border-radius: 40px;
             box-shadow: inset 0 0 10px rgba(0,0,0,0.6);
             border: 1px solid rgba(255,255,255,0.1);
@@ -200,25 +201,24 @@
 
         #msg { 
             text-align: center; 
-            font-size: 1.25rem; 
+            font-size: 1.15rem; 
             font-weight: bold; 
-            min-height: 35px; 
-            margin: 8px 0; 
+            min-height: 28px; 
+            margin: 4px 0; 
             text-shadow: 2px 2px 4px rgba(0,0,0,0.8); 
         }
 
-        /* Boutons de contrôle */
         .controls { 
             display: flex; 
-            gap: 12px; 
+            gap: 10px; 
             justify-content: center; 
             width: 100%; 
-            max-width: 460px; 
+            max-width: 440px; 
         }
         button { 
             flex: 1; 
-            padding: 12px; 
-            font-size: 0.9rem; 
+            padding: 10px; 
+            font-size: 0.85rem; 
             font-weight: bold; 
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -246,7 +246,7 @@
 </head>
 <body>
 
-    <h1>CASINO ROYALE DE LUXE</h1>
+    <h1>CASINO ROYALE</h1>
 
     <div class="bank-info">
         <div>Solde : <span id="balance-val">1000</span> $</div>
@@ -254,7 +254,32 @@
     </div>
     
     <div class="table">
-        <div class="casino-rules-arc">La Banque reste à 17 — Le Blackjack paie 3 pour 2 — Assurance paie 2 contre 1</div>
+        <svg class="table-felt-print" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <path id="text-curve-1" d="M 90,175 A 230,190 0 0,0 510,175" fill="none" />
+                <path id="text-curve-2" d="M 130,220 A 190,150 0 0,0 470,220" fill="none" />
+            </defs>
+
+            <path d="M 50,150 A 260,210 0 0,0 550,150" fill="none" stroke="rgba(255, 215, 0, 0.25)" stroke-width="2" stroke-dasharray="6,4" />
+
+            <g stroke="rgba(255, 215, 0, 0.15)" stroke-width="1.5" fill="none">
+                <rect x="195" y="45" width="40" height="58" rx="3" />
+                <rect x="245" y="45" width="40" height="58" rx="3" />
+                <rect x="295" y="45" width="40" height="58" rx="3" />
+                <rect x="345" y="45" width="40" height="58" rx="3" />
+                <rect x="395" y="45" width="40" height="58" rx="3" />
+            </g>
+
+            <text font-family="Georgia, serif" font-size="13" font-weight="bold" fill="rgba(255, 215, 0, 0.35)" letter-spacing="3" text-anchor="middle">
+                <textPath href="#text-curve-1" startOffset="50%">BLACKJACK PAYS 3 TO 2</textPath>
+            </text>
+            <text font-family="Georgia, serif" font-size="10" font-weight="bold" font-style="italic" fill="rgba(255, 215, 0, 0.22)" letter-spacing="1.5" text-anchor="middle">
+                <textPath href="#text-curve-2" startOffset="50%">Dealer must draw to 16 and stand on all 17s</textPath>
+            </text>
+
+            <polygon points="140,140 144,144 140,148 136,144" fill="rgba(255, 215, 0, 0.2)" />
+            <polygon points="460,140 464,144 460,148 456,144" fill="rgba(255, 215, 0, 0.2)" />
+        </svg>
 
         <div class="zone">
             <div class="zone-title">Croupier</div>
@@ -323,7 +348,7 @@
             const el = document.getElementById(elementId);
             const cardEl = document.createElement('div');
             cardEl.className = `card ${card.isRed ? 'red' : ''}`;
-            const randomRotation = (Math.random() * 6 - 3).toFixed(1);
+            const randomRotation = (Math.random() * 4 - 2).toFixed(1);
             cardEl.style.setProperty('--r', randomRotation);
             cardEl.innerHTML = `<div>${card.value}<br>${card.suit}</div><div class="bottom-suit">${card.value}<br>${card.suit}</div>`;
             el.appendChild(cardEl);
