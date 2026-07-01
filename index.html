@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackjack entre Potes</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: #0f4c2c; color: white; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 15px; }
+        h1 { margin-bottom: 10px; font-size: 1.8rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); text-align: center; }
+        .table { width: 100%; max-width: 600px; background: #146638; border: 6px solid #4a2e1b; border-radius: 20px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); display: flex; flex-direction: column; gap: 20px; }
+        .zone { background: rgba(0,0,0,0.2); border-radius: 10px; padding: 12px; min-height: 110px; position: relative; }
+        .zone-title { font-size: 0.9rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #a3e2bc; margin-bottom: 8px; }
+        .score { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.6); padding: 2px 8px; border-radius: 5px; font-weight: bold; }
+        .cards-flex { display: flex; gap: 8px; flex-wrap: wrap; }
+        .card { width: 60px; height: 90px; background: white; color: black; border-radius: 6px; display: flex; flex-direction: column; justify-content: space-between; padding: 5px; font-weight: bold; font-size: 1.1rem; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); animation: pop 0.3s ease; }
+        .card.red { color: #d12c2c; }
+        .card .bottom-suit { align-self: flex-end; transform: rotate(180deg); }
+        .controls { display: flex; gap: 10px; justify-content: center; margin-top: 10px; width: 100%; max-width: 600px; }
+        button { flex: 1; padding: 15px; font-size: 1rem; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: transform 0.1s; -webkit-tap-highlight-color: transparent; }
+        button:active { transform: scale(0.95); }
+        #btn-hit { background: #28a745; }
+        #btn-stand { background: #dc3545; }
+        #btn-restart { background: #007bff; display: none; }
+        #msg { text-align: center; font-size: 1.3rem; font-weight: bold; min-height: 30px; margin-top: 5px; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
+        @keyframes pop { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <h1>♣️ Blackjack Casino ♥️</h1>
+    
+    <div class="table">
+        <!-- Croupier -->
+        <div class="zone">
+            <div class="zone-title">Croupier</div>
+            <div class="score" id="dealer-score">0</div>
+            <div class="cards-flex" id="dealer-cards"></div>
+        </div>
+
+        <!-- Joueur -->
+        <div class="zone">
+            <div class="zone-title">Toi</div>
+            <div class="score" id="player-score">0</div>
+            <div class="cards-flex" id="player-cards"></div>
+        </div>
+    </div>
+
+    <div id="msg">Bonne chance !</div>
+
+    <div class="controls">
+        <button id="btn-hit" onclick="hit()">Tirer</button>
+        <button id="btn-stand" onclick="stand()">Rester</button>
+        <button id="btn-restart" onclick="initGame()">Rejouer</button>
+    </div>
+
+    <script>
+        const suits = ['♥️', '♦️', '♣️', '♠️'];
+        const values = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
+        let deck = [], playerCards = [], dealerCards = [], gameOver = false;
+
+        function createDeck() {
+            deck = [];
+            for (let s of suits) {
+                for (let v of values) {
+                    let weight = parseInt(v);
+                    if (['J','Q','K'].includes(v)) weight = 10;
+                    if (v === 'A') weight = 11;
+                    deck.push({ value: v, suit: s, weight: weight, isRed: ['♥️','♦️'].includes(s) });
+                }
+            }
+        }
+
+        function shuffleDeck() {
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+        }
+
+        function getScore(cards) {
+            let score = cards.reduce((sum, card) => sum + card.weight, 0);
+            let aces = cards.filter(card => card.value === 'A').length;
+            while (score > 21 && aces > 0) { score -= 10; aces--; }
+            return score;
+        }
+
+        function renderCard(card, elementId) {
+            const el = document.getElementById(elementId);
+            const cardEl = document.createElement('div');
+            cardEl.className = `card ${card.isRed ? 'red' : ''}`;
+            cardEl.innerHTML = `<div>${card.value} ${card.suit}</div><div class="bottom-suit">${card.value} ${card.suit}</div>`;
+            el.appendChild(cardEl);
+        }
+
+        function initGame() {
+            createDeck(); shuffleDeck();
+            playerCards = []; dealerCards = []; gameOver = false;
+            document.getElementById('player-cards').innerHTML = '';
+            document.getElementById('dealer-cards').innerHTML = '';
+            document.getElementById('msg').innerText = "À toi de jouer !";
+            document.getElementById('btn-hit').style.display = 'block';
+            document.getElementById('btn-stand').style.display = 'block';
+            document.getElementById('btn-restart').style.display = 'none';
+
+            hit(); hit();
+            dealerCards.push(deck.pop());
+            renderCard(dealerCards[0], 'dealer-cards');
+            updateScores();
+        }
+
+        function updateScores() {
+            document.getElementById('player-score').innerText = getScore(playerCards);
+            document.getElementById('dealer-score').innerText = getScore(dealerCards);
+        }
+
+        function hit() {
+            if (gameOver) return;
+            let card = deck.pop();
+            playerCards.push(card);
+            renderCard(card, 'player-cards');
+            updateScores();
+
+            if (getScore(playerCards) > 21) {
+                endGame("Perdu ! Tu as dépassé 21. 💸");
+            }
+        }
+
+        function stand() {
+            if (gameOver) return;
+            gameOver = true;
+
+            // Le croupier joue
+            while (getScore(dealerCards) < 17) {
+                let card = deck.pop();
+                dealerCards.push(card);
+                renderCard(card, 'dealer-cards');
+                updateScores();
+            }
+
+            let pScore = getScore(playerCards);
+            let dScore = getScore(dealerCards);
+
+            if (dScore > 21) endGame("Gagné ! Le croupier a dépassé 21. 🎉");
+            else if (pScore > dScore) endGame("Gagné ! Tu bats le croupier. 👑");
+            else if (pScore < dScore) endGame("Perdu ! Le croupier gagne. 💸");
+            else endGame("Égalité ! Tu récupères ta mise. 🤝");
+        }
+
+        function endGame(msg) {
+            gameOver = true;
+            document.getElementById('msg').innerText = msg;
+            document.getElementById('btn-hit').style.display = 'none';
+            document.getElementById('btn-stand').style.display = 'none';
+            document.getElementById('btn-restart').style.display = 'block';
+        }
+
+        window.onload = initGame;
+    </script>
+</body>
+</html>
