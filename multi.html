@@ -8,6 +8,8 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Georgia', serif; }
         body { background: radial-gradient(circle, #1a1a1a 0%, #0a0a0a 100%); color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 10px; overflow-x: hidden; }
+        .home-btn { position: absolute; top: 15px; left: 15px; background: rgba(255, 255, 255, 0.1); color: white; padding: 8px 12px; border-radius: 50%; text-decoration: none; font-size: 1.2rem; border: 1px solid #ffd700; z-index: 10; transition: 0.3s; }
+        .home-btn:hover { background: rgba(255, 255, 255, 0.2); }
         h1 { margin: 5px 0; font-size: 1.4rem; color: #ffd700; text-shadow: 0px 2px 4px rgba(0,0,0,0.8); text-align: center; font-weight: normal; letter-spacing: 3px; }
         .bank-info { display: flex; gap: 25px; margin-bottom: 10px; font-size: 0.95rem; background: rgba(0,0,0,0.6); padding: 6px 25px; border-radius: 30px; border: 1px solid #ffd700; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
         .bank-info span { color: #ffd700; font-weight: bold; }
@@ -41,6 +43,7 @@
     </style>
 </head>
 <body>
+    <a href="index.html" class="home-btn">🏠</a>
     <h1>CASINO ROYALE</h1>
     <div class="bank-info">
         <div>Votre Solde : <span id="balance-val">1000</span> $</div>
@@ -71,7 +74,6 @@
                 pSpot.innerHTML = `<div class="zone-title">${isMe ? 'Moi' : p.name}</div><div class="score">${p.score}</div><div class="player-bet-spot">${isMe ? (p.bet > 0 ? p.bet + '$' : 'Mise') : '***'}</div>`;
                 pSpot.insertBefore(cardsFlex, pSpot.children[1]); playersBox.appendChild(pSpot);
             });
-            // Gestion boutons...
             if (state.status === 'betting') { document.getElementById('controls-container').innerHTML = `<button id="btn-clear" onclick="clearBet()">Effacer</button><button id="btn-deal" onclick="startRound()">Distribuer</button>`; }
             else if (state.status === 'playing') { document.getElementById('controls-container').innerHTML = (state.players[myId]?.status === 'playing') ? `<button id="btn-hit" onclick="hit()">Tirer</button><button id="btn-stand" onclick="stand()">Rester</button>` : ''; }
             else { document.getElementById('controls-container').innerHTML = ''; }
