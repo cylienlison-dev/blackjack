@@ -1,26 +1,17 @@
-// server.js complet et corrigé
 const io = require("socket.io")(10000, { cors: { origin: "*" } });
 
 let players = {};
 let dealerHand = [];
 let deck = [];
-let gameStatus = 'betting'; // 'betting', 'playing', 'dealerTurn'
+let gameStatus = 'betting';
 
 const suits = ['♠', '♥', '♦', '♣'];
 const values = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
 
 function buildDeck() {
     deck = [];
-    for (let s of suits) {
-        for (let v of values) {
-            deck.push({ value: v, suit: s, isRed: (s === '♥' || s === '♦') });
-        }
-    }
-    // Mélange
-    for (let i = deck.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [deck[i], deck[j]] = [deck[j], deck[i]];
-    }
+    for (let s of suits) { for (let v of values) { deck.push({ value: v, suit: s, isRed: (s === '♥' || s === '♦') }); } }
+    for (let i = deck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [deck[i], deck[j]] = [deck[j], deck[i]]; }
 }
 
 function getCardValue(card) {
@@ -31,10 +22,7 @@ function getCardValue(card) {
 
 function calculateScore(hand) {
     let score = 0, aces = 0;
-    hand.forEach(c => {
-        score += getCardValue(c);
-        if (c.value === 'A') aces++;
-    });
+    hand.forEach(c => { score += getCardValue(c); if (c.value === 'A') aces++; });
     while (score > 21 && aces > 0) { score -= 10; aces--; }
     return score;
 }
@@ -50,12 +38,17 @@ function sendGameState() {
 }
 
 io.on('connection', (socket) => {
-    players[socket.id] = { id: socket.id, name: "Joueur " + (Object.keys(players).length + 1), cards: [], bet: 0, status: 'waiting', balance: 1000 };
+    // Initialisation du joueur avec un nom par défaut
+    players[socket.id] = { id: socket.id, name: "Anonyme", cards: [], bet: 0, status: 'waiting', balance: 1000 };
     
-    socket.on('disconnect', () => {
-        delete players[socket.id];
-        sendGameState();
+    socket.on('setPseudo', (pseudo) => {
+        if (players[socket.id]) {
+            players[socket.id].name = pseudo.substring(0, 10); // Limité à 10 caractères
+            sendGameState();
+        }
     });
+
+    socket.on('disconnect', () => { delete players[socket.id]; sendGameState(); });
 
     socket.on('placeBet', (amount) => {
         if (gameStatus === 'betting' && players[socket.id].balance >= amount) {
@@ -78,10 +71,7 @@ io.on('connection', (socket) => {
             gameStatus = 'playing';
             buildDeck();
             Object.values(players).forEach(p => {
-                if (p.bet > 0) {
-                    p.cards = [deck.pop(), deck.pop()];
-                    p.status = 'playing';
-                }
+                if (p.bet > 0) { p.cards = [deck.pop(), deck.pop()]; p.status = 'playing'; }
             });
             dealerHand = [deck.pop(), deck.pop()];
             sendGameState();
@@ -89,7 +79,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('hit', () => {
-        if (gameStatus === 'playing' && players[socket.id].status === 'playing') {
+        if (gameStatus === 'playing' && players[socket.id]?.status === 'playing') {
             players[socket.id].cards.push(deck.pop());
             if (calculateScore(players[socket.id].cards) >= 21) players[socket.id].status = 'finished';
             sendGameState();
@@ -99,22 +89,16 @@ io.on('connection', (socket) => {
     socket.on('stand', () => {
         if (gameStatus === 'playing') {
             players[socket.id].status = 'finished';
-            // Vérifier si tout le monde a fini
             if (Object.values(players).every(p => p.bet === 0 || p.status === 'finished')) {
                 gameStatus = 'dealerTurn';
-                // Logique croupier
                 while (calculateScore(dealerHand) < 17) dealerHand.push(deck.pop());
-                // Calcul des gains
                 let dScore = calculateScore(dealerHand);
                 Object.values(players).forEach(p => {
                     if (p.bet > 0) {
                         let pScore = calculateScore(p.cards);
-                        if (pScore > 21) {} // Perdu
-                        else if (dScore > 21 || pScore > dScore) p.balance += p.bet * 2;
-                        else if (pScore === dScore) p.balance += p.bet;
-                        p.bet = 0;
-                        p.cards = [];
-                        p.status = 'waiting';
+                        if (pScore <= 21 && (dScore > 21 || pScore > dScore)) p.balance += p.bet * 2;
+                        else if (pScore <= 21 && pScore === dScore) p.balance += p.bet;
+                        p.bet = 0; p.cards = []; p.status = 'waiting';
                     }
                 });
                 gameStatus = 'betting';
