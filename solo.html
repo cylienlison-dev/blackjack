@@ -6,65 +6,21 @@
     <title>Casino Royale - Mode Solo</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Georgia', serif; }
-        body { 
-            background: radial-gradient(circle, #1a1a1a 0%, #0a0a0a 100%); 
-            color: white; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center;
-            min-height: 100vh; 
-            padding: 10px;
-            overflow: hidden;
-        }
-        h1 { 
-            margin: 2px 0 5px 0; font-size: 1.4rem; color: #ffd700;
-            text-shadow: 0px 2px 4px rgba(0,0,0,0.8); text-align: center; 
-            font-weight: normal; letter-spacing: 3px;
-        }
-        .bank-info {
-            display: flex; gap: 25px; margin-bottom: 8px; font-size: 1rem;
-            background: rgba(0,0,0,0.6); padding: 6px 25px; border-radius: 30px;
-            border: 1px solid #ffd700; box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-        }
+        body { background: radial-gradient(circle, #1a1a1a 0%, #0a0a0a 100%); color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 10px; overflow: hidden; }
+        h1 { margin: 2px 0 5px 0; font-size: 1.4rem; color: #ffd700; text-shadow: 0px 2px 4px rgba(0,0,0,0.8); text-align: center; font-weight: normal; letter-spacing: 3px; }
+        .bank-info { display: flex; gap: 25px; margin-bottom: 8px; font-size: 1rem; background: rgba(0,0,0,0.6); padding: 6px 25px; border-radius: 30px; border: 1px solid #ffd700; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
         .bank-info span { color: #ffd700; font-weight: bold; }
-        .table { 
-            width: 100%; max-width: 650px; 
-            background: radial-gradient(circle, #0e5c33 60%, #073a1f 100%); 
-            border: 14px solid #3d2314; border-bottom-color: #2b180d;
-            border-radius: 50% 50% 25px 25px / 45% 45% 25px 25px; 
-            padding: 15px 20px; box-shadow: inset 0 0 70px rgba(0,0,0,1), 0 15px 35px rgba(0,0,0,0.8); 
-            display: flex; flex-direction: column; justify-content: space-between;
-            position: relative; height: 420px; 
-        }
+        .table { width: 100%; max-width: 650px; background: radial-gradient(circle, #0e5c33 60%, #073a1f 100%); border: 14px solid #3d2314; border-bottom-color: #2b180d; border-radius: 50% 50% 25px 25px / 45% 45% 25px 25px; padding: 15px 20px; box-shadow: inset 0 0 70px rgba(0,0,0,1), 0 15px 35px rgba(0,0,0,0.8); display: flex; flex-direction: column; justify-content: space-between; position: relative; height: 420px; }
         .table-felt-print { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
         .zone { display: flex; flex-direction: column; align-items: center; gap: 2px; position: relative; z-index: 2; }
-        .zone-title { 
-            font-size: 0.75rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; 
-            color: rgba(255, 215, 0, 0.8); text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
-        }
-        .score { 
-            background: rgba(0,0,0,0.85); padding: 1px 8px; border-radius: 20px; 
-            font-weight: bold; font-size: 0.75rem; color: #fff; border: 1px solid #ffd700; margin-top: 1px;
-        }
+        .zone-title { font-size: 0.75rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: rgba(255, 215, 0, 0.8); text-shadow: 1px 1px 2px rgba(0,0,0,0.6); }
+        .score { background: rgba(0,0,0,0.85); padding: 1px 8px; border-radius: 20px; font-weight: bold; font-size: 0.75rem; color: #fff; border: 1px solid #ffd700; margin-top: 1px; }
         .cards-flex { display: flex; justify-content: center; min-height: 85px; width: 100%; margin-top: 4px; }
-        .card { 
-            width: 58px; height: 85px; background: #ffffff; color: #111111; border-radius: 5px; 
-            display: flex; flex-direction: column; justify-content: space-between; padding: 5px; 
-            font-weight: bold; font-size: 1rem; box-shadow: 2px 4px 8px rgba(0,0,0,0.6); 
-            border: 1px solid #d1d1d1; margin: 0 -12px; font-family: 'Arial', sans-serif;
-            animation: dealCard 0.3s ease-out;
-        }
+        .card { width: 58px; height: 85px; background: #ffffff; color: #111111; border-radius: 5px; display: flex; flex-direction: column; justify-content: space-between; padding: 5px; font-weight: bold; font-size: 1rem; box-shadow: 2px 4px 8px rgba(0,0,0,0.6); border: 1px solid #d1d1d1; margin: 0 -12px; font-family: 'Arial', sans-serif; animation: dealCard 0.3s ease-out; }
         .card.red { color: #cc1111; }
         .card .bottom-suit { transform: rotate(180deg); align-self: flex-end; }
         .token-rack { display: flex; gap: 12px; justify-content: center; margin: 8px 0; background: rgba(0,0,0,0.5); padding: 8px 20px; border-radius: 40px; }
-        .token {
-            width: 44px; height: 44px; border-radius: 50%; border: 3px dashed #fff;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.75rem; font-weight: bold; color: white; cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.6), inset 0 0 8px rgba(0,0,0,0.4);
-            font-family: 'Arial', sans-serif; user-select: none; transition: transform 0.1s;
-        }
+        .token { width: 44px; height: 44px; border-radius: 50%; border: 3px dashed #fff; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; color: white; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.6), inset 0 0 8px rgba(0,0,0,0.4); font-family: 'Arial', sans-serif; user-select: none; transition: transform 0.1s; }
         .token:active { transform: scale(0.9); }
         .token-5 { background: #cc2424; border-color: #ffd700; }  
         .token-25 { background: #1a54a1; border-color: #fff; }    
@@ -72,11 +28,7 @@
         .token-500 { background: #7a1fa1; border-color: #fff; }   
         #msg { text-align: center; font-size: 1.1rem; font-weight: bold; min-height: 28px; margin: 4px 0; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
         .controls { display: flex; gap: 10px; justify-content: center; width: 100%; max-width: 440px; }
-        button { 
-            flex: 1; padding: 11px; font-size: 0.85rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;
-            border: 2px solid rgba(255,255,255,0.2); border-radius: 30px; cursor: pointer; color: white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4); transition: all 0.2s;
-        }
+        button { flex: 1; padding: 11px; font-size: 0.85rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; border: 2px solid rgba(255,255,255,0.2); border-radius: 30px; cursor: pointer; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.4); transition: all 0.2s; }
         button:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; box-shadow: none; }
         #btn-hit { background: linear-gradient(135deg, #1e7e34 0%, #155724 100%); border-color: #28a745; }
         #btn-stand { background: linear-gradient(135deg, #bd2130 0%, #721c24 100%); border-color: #dc3545; }
@@ -86,192 +38,40 @@
     </style>
 </head>
 <body>
-
     <h1>CASINO ROYALE - SOLO</h1>
-
     <div class="bank-info">
         <div>Solde : <span id="balance-val">1000</span> $</div>
         <div>Mise : <span id="bet-val">0</span> $</div>
     </div>
-    
     <div class="table">
-        <svg class="table-felt-print" viewBox="0 0 650 420" preserveAspectRatio="none">
-            <defs><path id="text-curve" d="M 100,210 A 220,160 0 0,0 550,210" fill="none" /></defs>
-            <path d="M 70,170 A 260,190 0 0,0 580,170" fill="none" stroke="rgba(255, 215, 0, 0.15)" stroke-width="2" stroke-dasharray="6,4" />
-            <text font-family="Georgia, serif" font-size="15" font-weight="bold" fill="rgba(255, 215, 0, 0.2)" letter-spacing="4" text-anchor="middle">
-                <textPath href="#text-curve" startOffset="50%">BLACKJACK PAYS 3 TO 2</textPath>
-            </text>
-        </svg>
-
-        <div class="zone" id="dealer-zone">
-            <div class="zone-title">Croupier</div>
-            <div class="score" id="dealer-score">0</div>
-            <div class="cards-flex" id="dealer-cards"></div>
-        </div>
-
-        <div class="zone" id="player-zone">
-            <div class="cards-flex" id="player-cards"></div>
-            <div class="score" id="player-score">0</div>
-            <div class="zone-title">Votre Main</div>
-        </div>
+        <svg class="table-felt-print" viewBox="0 0 650 420" preserveAspectRatio="none"><defs><path id="text-curve" d="M 100,210 A 220,160 0 0,0 550,210" fill="none" /></defs><path d="M 70,170 A 260,190 0 0,0 580,170" fill="none" stroke="rgba(255, 215, 0, 0.15)" stroke-width="2" stroke-dasharray="6,4" /><text font-family="Georgia, serif" font-size="15" font-weight="bold" fill="rgba(255, 215, 0, 0.2)" letter-spacing="4" text-anchor="middle"><textPath href="#text-curve" startOffset="50%">BLACKJACK PAYS 3 TO 2</textPath></text></svg>
+        <div class="zone" id="dealer-zone"><div class="zone-title">Croupier</div><div class="score" id="dealer-score">0</div><div class="cards-flex" id="dealer-cards"></div></div>
+        <div class="zone" id="player-zone"><div class="cards-flex" id="player-cards"></div><div class="score" id="player-score">0</div><div class="zone-title">Votre Main</div></div>
     </div>
-
     <div id="msg">Placez votre mise pour commencer</div>
-
-    <div class="token-rack" id="rack">
-        <div class="token token-5" onclick="addBet(5)">5$</div>
-        <div class="token token-25" onclick="addBet(25)">25$</div>
-        <div class="token token-100" onclick="addBet(100)">100$</div>
-        <div class="token token-500" onclick="addBet(500)">500$</div>
-    </div>
-
-    <div class="controls">
-        <button id="btn-clear" onclick="clearBet()">Effacer</button>
-        <button id="btn-hit" onclick="hit()" disabled>Tirer</button>
-        <button id="btn-stand" onclick="stand()" disabled>Rester</button>
-        <button id="btn-deal" onclick="deal()" disabled>Distribuer</button>
-    </div>
-
+    <div class="token-rack" id="rack"><div class="token token-5" onclick="addBet(5)">5$</div><div class="token token-25" onclick="addBet(25)">25$</div><div class="token token-100" onclick="addBet(100)">100$</div><div class="token token-500" onclick="addBet(500)">500$</div></div>
+    <div class="controls"><button id="btn-clear" onclick="clearBet()">Effacer</button><button id="btn-hit" onclick="hit()" disabled>Tirer</button><button id="btn-stand" onclick="stand()" disabled>Rester</button><button id="btn-deal" onclick="deal()" disabled>Distribuer</button></div>
     <script>
-        const suits = ['♠', '♥', '♦', '♣'];
-        const values = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
-        let deck = [], playerHand = [], dealerHand = [];
-        let balance = 1000, bet = 0, gameActive = false;
-
-        function buildDeck() {
-            deck = [];
-            for (let s of suits) {
-                for (let v of values) {
-                    deck.push({ value: v, suit: s, isRed: (s==='♥'||s==='♦') });
-                }
-            }
+        const suits = ['♠', '♥', '♦', '♣']; const values = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
+        let deck = [], playerHand = [], dealerHand = []; let balance = 1000, bet = 0, gameActive = false;
+        function buildDeck() { deck = []; for (let s of suits) { for (let v of values) { deck.push({ value: v, suit: s, isRed: (s==='♥'||s==='♦') }); } } }
+        function shuffle() { for (let i = deck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [deck[i], deck[j]] = [deck[j], deck[i]]; } }
+        function getCardValue(card) { if (['J', 'Q', 'K'].includes(card.value)) return 10; if (card.value === 'A') return 11; return parseInt(card.value); }
+        function calculateScore(hand) { let score = 0, aces = 0; for (let c of hand) { score += getCardValue(c); if (c.value === 'A') aces++; } while (score > 21 && aces > 0) { score -= 10; aces--; } return score; }
+        function renderCard(card, container, hidden=false) { const cardEl = document.createElement('div'); cardEl.className = `card ${card.isRed && !hidden ? 'red' : ''}`; if (hidden) { cardEl.style.background = 'linear-gradient(135deg, #a31d1d 0%, #5e0d0d 100%)'; cardEl.style.border = '3px solid #fff'; cardEl.innerHTML = '<div style="color:white;text-align:center;margin-top:20px;font-size:1.5rem;">♦</div>'; } else { cardEl.innerHTML = `<div>${card.value}<br>${card.suit}</div><div class="bottom-suit">${card.value}<br>${card.suit}</div>`; } container.appendChild(cardEl); }
+        function updateUI(showAllDealer = false) { document.getElementById('balance-val').innerText = balance; document.getElementById('bet-val').innerText = bet;
+            const pCards = document.getElementById('player-cards'); pCards.innerHTML = ''; playerHand.forEach(c => renderCard(c, pCards)); document.getElementById('player-score').innerText = calculateScore(playerHand);
+            const dCards = document.getElementById('dealer-cards'); dCards.innerHTML = '';
+            if (dealerHand.length > 0) { if (showAllDealer) { dealerHand.forEach(c => renderCard(c, dCards)); document.getElementById('dealer-score').innerText = calculateScore(dealerHand); } else { renderCard(dealerHand[0], dCards); renderCard(dealerHand[1], dCards, true); document.getElementById('dealer-score').innerText = getCardValue(dealerHand[0]); } } else { document.getElementById('dealer-score').innerText = '0'; }
+            document.getElementById('btn-deal').disabled = gameActive || bet === 0; document.getElementById('btn-clear').disabled = gameActive || bet === 0; document.getElementById('btn-hit').disabled = !gameActive; document.getElementById('btn-stand').disabled = !gameActive; document.getElementById('rack').style.opacity = gameActive ? '0.3' : '1'; document.getElementById('rack').style.pointerEvents = gameActive ? 'none' : 'auto';
         }
-
-        function shuffle() {
-            for (let i = deck.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [deck[i], deck[j]] = [deck[j], deck[i]];
-            }
-        }
-
-        function getCardValue(card) {
-            if (['J', 'Q', 'K'].includes(card.value)) return 10;
-            if (card.value === 'A') return 11;
-            return parseInt(card.value);
-        }
-
-        function calculateScore(hand) {
-            let score = 0, aces = 0;
-            for (let c of hand) {
-                score += getCardValue(c);
-                if (c.value === 'A') aces++;
-            }
-            while (score > 21 && aces > 0) { score -= 10; aces--; }
-            return score;
-        }
-
-        function renderCard(card, container, hidden=false) {
-            const cardEl = document.createElement('div');
-            cardEl.className = `card ${card.isRed && !hidden ? 'red' : ''}`;
-            if (hidden) {
-                cardEl.style.background = 'linear-gradient(135deg, #a31d1d 0%, #5e0d0d 100%)';
-                cardEl.style.border = '3px solid #fff';
-                cardEl.innerHTML = '<div style="color:white;text-align:center;margin-top:20px;font-size:1.5rem;">♦</div>';
-            } else {
-                cardEl.innerHTML = `<div>${card.value}<br>${card.suit}</div><div class="bottom-suit">${card.value}<br>${card.suit}</div>`;
-            }
-            container.appendChild(cardEl);
-        }
-
-        function updateUI(showAllDealer = false) {
-            document.getElementById('balance-val').innerText = balance;
-            document.getElementById('bet-val').innerText = bet;
-            
-            const pCards = document.getElementById('player-cards');
-            pCards.innerHTML = '';
-            playerHand.forEach(c => renderCard(c, pCards));
-            document.getElementById('player-score').innerText = calculateScore(playerHand);
-
-            const dCards = document.getElementById('dealer-cards');
-            dCards.innerHTML = '';
-            if (dealerHand.length > 0) {
-                if (showAllDealer) {
-                    dealerHand.forEach(c => renderCard(c, dCards));
-                    document.getElementById('dealer-score').innerText = calculateScore(dealerHand);
-                } else {
-                    renderCard(dealerHand[0], dCards);
-                    renderCard(dealerHand[1], dCards, true);
-                    document.getElementById('dealer-score').innerText = getCardValue(dealerHand[0]);
-                }
-            } else {
-                document.getElementById('dealer-score').innerText = '0';
-            }
-
-            document.getElementById('btn-deal').disabled = gameActive || bet === 0;
-            document.getElementById('btn-clear').disabled = gameActive || bet === 0;
-            document.getElementById('btn-hit').disabled = !gameActive;
-            document.getElementById('btn-stand').disabled = !gameActive;
-            document.getElementById('rack').style.opacity = gameActive ? '0.3' : '1';
-            document.getElementById('rack').style.pointerEvents = gameActive ? 'none' : 'auto';
-        }
-
-        function addBet(amount) {
-            if (gameActive) return;
-            if (balance >= amount) { bet += amount; balance -= amount; updateUI(); }
-            else { document.getElementById('msg').innerText = "Solde insuffisant !"; }
-        }
-
-        function clearBet() {
-            if (gameActive) return;
-            balance += bet; bet = 0; updateUI();
-            document.getElementById('msg').innerText = "Mise effacée. Placez vos jetons.";
-        }
-
-        function deal() {
-            if (bet === 0 || gameActive) return;
-            gameActive = true;
-            buildDeck(); shuffle();
-            playerHand = [deck.pop(), deck.pop()];
-            dealerHand = [deck.pop(), deck.pop()];
-            document.getElementById('msg').innerText = "Tirer ou Rester ?";
-            
-            if (calculateScore(playerHand) === 21) { endRound(); }
-            else { updateUI(); }
-        }
-
-        function hit() {
-            if (!gameActive) return;
-            playerHand.push(deck.pop());
-            if (calculateScore(playerHand) >= 21) { endRound(); }
-            else { updateUI(); }
-        }
-
+        function addBet(amount) { if (gameActive) return; if (balance >= amount) { bet += amount; balance -= amount; updateUI(); } else { document.getElementById('msg').innerText = "Solde insuffisant !"; } }
+        function clearBet() { if (gameActive) return; balance += bet; bet = 0; updateUI(); document.getElementById('msg').innerText = "Mise effacée. Placez vos jetons."; }
+        function deal() { if (bet === 0 || gameActive) return; gameActive = true; buildDeck(); shuffle(); playerHand = [deck.pop(), deck.pop()]; dealerHand = [deck.pop(), deck.pop()]; document.getElementById('msg').innerText = "Tirer ou Rester ?"; if (calculateScore(playerHand) === 21) { endRound(); } else { updateUI(); } }
+        function hit() { if (!gameActive) return; playerHand.push(deck.pop()); if (calculateScore(playerHand) >= 21) { endRound(); } else { updateUI(); } }
         function stand() { if (gameActive) endRound(); }
-
-        function endRound() {
-            gameActive = false;
-            let pScore = calculateScore(playerHand);
-            
-            if (pScore <= 21) {
-                while (calculateScore(dealerHand) < 17) { dealerHand.push(deck.pop()); }
-            }
-
-            let dScore = calculateScore(dealerHand);
-            updateUI(true);
-
-            let msg = '';
-            if (pScore > 21) { msg = "Vous avez sauté (Bust) ! Le croupier gagne."; bet = 0; }
-            else if (dScore > 21) { msg = "Le croupier a sauté ! Vous gagnez !"; balance += bet * 2; bet = 0; }
-            else if (pScore === 21 && playerHand.length === 2 && dScore !== 21) { msg = "BLACKJACK ! Vous gagnez 3 pour 2 !"; balance += Math.floor(bet * 2.5); bet = 0; }
-            else if (pScore > dScore) { msg = `Vous gagnez avec ${pScore} contre ${dScore} !`; balance += bet * 2; bet = 0; }
-            else if (pScore < dScore) { msg = `Le croupier gagne avec ${dScore} contre ${pScore}.`; bet = 0; }
-            else { msg = `Égalité (Push) à ${pScore} !`; balance += bet; bet = 0; }
-
-            document.getElementById('msg').innerText = msg;
-            updateUI();
-        }
+        function endRound() { gameActive = false; let pScore = calculateScore(playerHand); if (pScore <= 21) { while (calculateScore(dealerHand) < 17) { dealerHand.push(deck.pop()); } } let dScore = calculateScore(dealerHand); updateUI(true); let msg = ''; if (pScore > 21) { msg = "Vous avez sauté (Bust) ! Le croupier gagne."; bet = 0; } else if (dScore > 21) { msg = "Le croupier a sauté ! Vous gagnez !"; balance += bet * 2; bet = 0; } else if (pScore === 21 && playerHand.length === 2 && dScore !== 21) { msg = "BLACKJACK ! Vous gagnez 3 pour 2 !"; balance += Math.floor(bet * 2.5); bet = 0; } else if (pScore > dScore) { msg = `Vous gagnez avec ${pScore} contre ${dScore} !`; balance += bet * 2; bet = 0; } else if (pScore < dScore) { msg = `Le croupier gagne avec ${dScore} contre ${pScore}.`; bet = 0; } else { msg = `Égalité (Push) à ${pScore} !`; balance += bet; bet = 0; } document.getElementById('msg').innerText = msg; updateUI(true); }
         buildDeck();
     </script>
 </body>
 </html>
-''
